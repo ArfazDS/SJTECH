@@ -1,0 +1,11 @@
+name: BookMyShow Hourly Monitor
+
+on:
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  test-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Say Hello
+        run: echo "👋 Hello from GitHub Actions!"
