@@ -13,7 +13,7 @@ def send_email_alert(EMAIL_USER, EMAIL_PASS):
     msg = EmailMessage()
     msg['Subject'] = "🎟️ BookMyShow Alert: Dates Active!"
     msg['From'] = EMAIL_USER
-    msg['To'] = 'ak.sjtech@gmail.com'  # Receiver
+    msg['To'] = 'shashwatjoshee@gmail.com'  # Receiver
 
     msg.set_content("Required dates are now active on BookMyShow!")
 
