@@ -2,7 +2,7 @@ import asyncio
 import os
 import smtplib
 from email.message import EmailMessage
-from playwright.async_api import async_playwright\
+from playwright.async_api import async_playwright
 
 def send_email_alert(EMAIL_USER, EMAIL_PASS):
 
@@ -13,7 +13,7 @@ def send_email_alert(EMAIL_USER, EMAIL_PASS):
     msg = EmailMessage()
     msg['Subject'] = "🎟️ BookMyShow Alert: Dates Active!"
     msg['From'] = EMAIL_USER
-    msg['To'] = 'ak.sjtech@gmail.com'  # Change to your email
+    msg['To'] = 'ak.sjtech@gmail.com'  # Receiver
 
     msg.set_content("Required dates are now active on BookMyShow!")
 
@@ -55,8 +55,8 @@ async def bookmyshow(url,EMAIL_USER, EMAIL_PASS):
         print(f"Error processing {url} : {e}")
 
 async def main():
-    EMAIL_USER="arfazkhank@gmail.com"
-    EMAIL_PASS="xkuz iysd imzc mabk"
+    EMAIL_USER="arfazkhank@gmail.com" # Sender
+    EMAIL_PASS="xkuz iysd imzc mabk"  # Password generated in app password section in gmail
 
     url = "https://in.bookmyshow.com/cinemas/hyderabad/pvr-nexus-mall-kukatpally-hyderabad/buytickets/PVFS/20250710"
     await bookmyshow(url,EMAIL_USER, EMAIL_PASS)
