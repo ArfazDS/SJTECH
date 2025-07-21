@@ -41,7 +41,7 @@ async def bookmyshow(url,EMAIL_USER, EMAIL_PASS):
             spans = await page.query_selector_all(f'{div_selector} > span.sc-h5edv-1.lbMdAA')
             span_texts = [await span.inner_text() for span in spans]
 
-            required_texts = ['THUR', 'FRI']
+            required_texts = ['THU', 'FRI']
             if span_texts[:2] == required_texts:
                 print("✅ Activated.")
                 send_email_alert(EMAIL_USER, EMAIL_PASS)
