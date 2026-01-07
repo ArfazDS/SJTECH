@@ -103,7 +103,7 @@ def run():
                         print("[-] Date not active yet")
                         send_alert(
                             f"🚨 DATE NOT ACTIVE!\n"
-                            f"{date_parts[0]} {date_parts[1]} {date_parts[2]}\n"
+                            f"{date_parts[0]} {date_parts[1]} {date_parts[2]}\n")
 
 
 
