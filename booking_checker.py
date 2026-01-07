@@ -2,6 +2,7 @@ import time
 import random
 import requests
 from playwright.sync_api import sync_playwright
+import os
 
 # --- CONFIGURATION ---
 # The date you WANT (e.g., 09 Jan 2026)
