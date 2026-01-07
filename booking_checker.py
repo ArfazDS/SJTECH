@@ -55,7 +55,7 @@ def run():
                 try:
                     # 1. Navigate to the TARGET (Jan 09)
                     # wait_until="domcontentloaded" ensures we wait for the redirect to finish
-                    page.goto(TARGET_URL, wait_until="domcontentloaded", timeout=60000)
+                    page.goto(TARGET_URL, wait_until="domcontentloaded", timeout=20000)
                     
                     # 2. Get the Final URL after loading
                     final_url = page.url
