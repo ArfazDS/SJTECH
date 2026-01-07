@@ -11,10 +11,13 @@ TARGET_URL = "https://in.bookmyshow.com/cinemas/hyderabad/aparna-cinemas-nallaga
 TARGET_DATE_ID = "20260109"
 
 # Telegram Config
-TELEGRAM_TOKEN = "TELEGRAM_TOKEN"
-TELEGRAM_CHAT_ID = "TELEGRAM_CHAT_ID"
-print("TOKEN PRESENT:", bool(TELEGRAM_TOKEN))
-print("CHAT ID PRESENT:", bool(TELEGRAM_CHAT_ID))
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "").strip()
+TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "").strip()
+
+print("TOKEN LENGTH:", len(TELEGRAM_TOKEN))
+print("TOKEN START:", TELEGRAM_TOKEN[:10])
+print("TOKEN END:", TELEGRAM_TOKEN[-5:])
+
 
 def send_alert(msg):
     url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
