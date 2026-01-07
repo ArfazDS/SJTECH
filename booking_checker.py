@@ -4,6 +4,7 @@ import requests
 from playwright.sync_api import sync_playwright
 import os
 import re
+from datetime import datetime
 
 # --- CONFIGURATION ---
 # The date you WANT (e.g., 09 Jan 2026)
@@ -11,6 +12,8 @@ TARGET_URL = "https://in.bookmyshow.com/cinemas/hyderabad/aparna-cinemas-nallaga
 
 # The Date part of the URL to strictly verify (e.g. "20260109")
 TARGET_DATE_ID = "20260109"
+dt = datetime.strptime(TARGET_DATE_ID, "%Y%m%d")
+formatted_date = dt.strftime("%a %d %b")
 
 # Telegram Config
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "").strip()
@@ -56,7 +59,7 @@ def run():
                     if TARGET_DATE_ID in date_str:
                         # --- SUCCESS: WE STAYED ON JAN 09 ---
                         print(f"[!!!] SUCCESS!")
-                        send_alert(f"🚨 DATE OPENED! \nLink: {final_url}")
+                        send_alert(f"🚨 DATE OPENED! You can now book for {formatted_date} \nLink: {final_url}")
                         
                         # # Double check content just in case
                         # content = page.content().lower()
@@ -71,7 +74,7 @@ def run():
                         # Extract the date we were sent to, just for logging
                         redirected_date = final_url.split('/')[-1] if '/' in final_url else "Unknown"
                         print(f"[-] Redirected to {redirected_date}. Target {TARGET_DATE_ID} is still closed.")
-                        send_alert("Date not available yet")
+                        send_alert(f"Bookings for {formatted_date} not available yet")
 
                 except Exception as e:
                     print(f"[!] Error checking: {e}")
