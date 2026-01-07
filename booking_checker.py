@@ -2,6 +2,9 @@ import time
 import random
 import requests
 from playwright.sync_api import sync_playwright
+print("TOKEN PRESENT:", bool(TELEGRAM_TOKEN))
+print("CHAT ID PRESENT:", bool(TELEGRAM_CHAT_ID))
+
 
 # --- CONFIGURATION ---
 # The date you WANT (e.g., 09 Jan 2026)
@@ -15,12 +18,10 @@ TELEGRAM_TOKEN = "TELEGRAM_TOKEN"
 TELEGRAM_CHAT_ID = "TELEGRAM_CHAT_ID"
 
 def send_alert(msg):
-    try:
-        url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
-        requests.post(url, json={"chat_id": TELEGRAM_CHAT_ID, "text": msg})
-        print(f"🔔 [ALERT] {msg}")
-    except:
-        pass
+    url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
+    r = requests.post(url, json={"chat_id": TELEGRAM_CHAT_ID, "text": msg})
+    print("Telegram response:", r.text)
+
 
 def run():
     with sync_playwright() as p:
