@@ -11,8 +11,8 @@ TARGET_URL = "https://in.bookmyshow.com/cinemas/hyderabad/aparna-cinemas-nallaga
 TARGET_DATE_ID = "20260109"
 
 # Telegram Config
-TELEGRAM_TOKEN = "YOUR_BOT_TOKEN"
-TELEGRAM_CHAT_ID = "YOUR_CHAT_ID"
+TELEGRAM_TOKEN = "8495796829:AAELbjZe56RJMpLXF_HccosbJodcn2fAXL0"
+TELEGRAM_CHAT_ID = "684803039"
 
 def send_alert(msg):
     try:
