@@ -13,7 +13,14 @@ TARGET_URL = "https://in.bookmyshow.com/cinemas/hyderabad/aparna-cinemas-nallaga
 # The Date part of the URL to strictly verify (e.g. "20260109")
 TARGET_DATE_ID = "20260109"
 dt = datetime.strptime(TARGET_DATE_ID, "%Y%m%d")
-formatted_date = dt.strftime("%a %d %b")
+# formatted_date = dt.strftime("%a %d %b")
+
+dt = datetime.strptime(TARGET_DATE_ID, "%Y%m%d")
+date_parts = [
+    dt.strftime("%a"),  # Fri
+    dt.strftime("%d"),  # 09
+    dt.strftime("%b"),  # Jan
+]
 
 # Telegram Config
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "").strip()
@@ -52,20 +59,52 @@ def run():
                     
                     # 2. Get the Final URL after loading
                     final_url = page.url
-                    m = re.search(r"(\d{8})$", final_url)
-                    date_str = m.group(1)
+                    # --- DATE CELL DETECTION LOGIC ---
+
+                    date_found_and_active = False
                     
-                    # 3. Compare: Did we stay on the Target, or did we get bounced?
-                    if TARGET_DATE_ID == date_str:
-                        content = page.content().lower()
+                    # Select all date containers
+                    date_divs = page.query_selector_all("div.sc-h5edv-0")
                     
-                        if "no shows available" not in content:
-                            send_alert(f"🚨 DATE OPENED! You can now book for {formatted_date}\n{final_url}")
+                    for div in date_divs:
+                        div_class = div.get_attribute("class") or ""
+                    
+                        # Skip inactive dates
+                        if "cmkkZb" in div_class:
+                            continue
+                    
+                        # Find required spans inside this div
+                        span_day = div.query_selector("span.sc-h5edv-1.lbMdAA")
+                        span_date = div.query_selector("span.sc-h5edv-2.hdBsYM")
+                        span_month = div.query_selector("span.sc-h5edv-3.WDdWY")
+                    
+                        if not (span_day and span_date and span_month):
+                            continue
+                    
+                        day_text = span_day.inner_text().strip()
+                        date_text = span_date.inner_text().strip()
+                        month_text = span_month.inner_text().strip()
+                    
+                        if (
+                            day_text == date_parts[0]
+                            and date_text == date_parts[1]
+                            and month_text == date_parts[2]
+                        ):
+                            date_found_and_active = True
                             break
-                        else:
-                            print("[-] Date visible but bookings not opened yet")
+                    if date_found_and_active:
+                        send_alert(
+                            f"🚨 DATE ACTIVE!\n"
+                            f"{date_parts[0]} {date_parts[1]} {date_parts[2]}\n"
+                            f"Link: {page.url}"
+                        )
+                        break
                     else:
-                        print("[-] Redirected. Date not visible yet.")
+                        print("[-] Date not active yet")
+                        send_alert(
+                            f"🚨 DATE NOT ACTIVE!\n"
+                            f"{date_parts[0]} {date_parts[1]} {date_parts[2]}\n"
+
 
 
                 except Exception as e:
