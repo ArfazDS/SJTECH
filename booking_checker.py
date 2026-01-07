@@ -52,15 +52,16 @@ def run():
                     # 3. Compare: Did we stay on the Target, or did we get bounced?
                     if TARGET_DATE_ID in final_url:
                         # --- SUCCESS: WE STAYED ON JAN 09 ---
-                        print(f"[!!!] SUCCESS! URL did not redirect.\nLoaded: {final_url}")
+                        print(f"[!!!] SUCCESS!")
+                        send_alert(f"🚨 DATE OPENED! \nLink: {final_url}")
                         
-                        # Double check content just in case
-                        content = page.content().lower()
-                        if "no shows available" not in content:
-                            send_alert(f"🚨 DATE OPENED! \nLink: {final_url}")
-                            break # Stop and exit
-                        else:
-                            print("[-] URL is correct, but page says 'No Shows'. Keeping watch...")
+                        # # Double check content just in case
+                        # content = page.content().lower()
+                        # if "no shows available" not in content:
+                        #     send_alert(f"🚨 DATE OPENED! \nLink: {final_url}")
+                        #     break # Stop and exit
+                        # else:
+                        #     print("[-] URL is correct, but page says 'No Shows'. Keeping watch...")
                     
                     else:
                         # --- FAIL: WE WERE REDIRECTED (likely to Jan 08) ---
