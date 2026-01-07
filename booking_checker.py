@@ -56,25 +56,17 @@ def run():
                     date_str = m.group(1)
                     
                     # 3. Compare: Did we stay on the Target, or did we get bounced?
-                    if TARGET_DATE_ID in date_str:
-                        # --- SUCCESS: WE STAYED ON JAN 09 ---
-                        print(f"[!!!] SUCCESS!")
-                        send_alert(f"🚨 DATE OPENED! You can now book for {formatted_date} \nLink: {final_url}")
-                        
-                        # # Double check content just in case
-                        # content = page.content().lower()
-                        # if "no shows available" not in content:
-                        #     send_alert(f"🚨 DATE OPENED! \nLink: {final_url}")
-                        #     break # Stop and exit
-                        # else:
-                        #     print("[-] URL is correct, but page says 'No Shows'. Keeping watch...")
+                    if TARGET_DATE_ID == date_str:
+                        content = page.content().lower()
                     
+                        if "no shows available" not in content:
+                            send_alert(f"🚨 DATE OPENED! You can now book for {formatted_date}\n{final_url}")
+                            break
+                        else:
+                            print("[-] Date visible but bookings not opened yet")
                     else:
-                        # --- FAIL: WE WERE REDIRECTED (likely to Jan 08) ---
-                        # Extract the date we were sent to, just for logging
-                        redirected_date = final_url.split('/')[-1] if '/' in final_url else "Unknown"
-                        print(f"[-] Redirected to {redirected_date}. Target {TARGET_DATE_ID} is still closed.")
-                        send_alert(f"Bookings for {formatted_date} not available yet")
+                        print("[-] Redirected. Date not visible yet.")
+
 
                 except Exception as e:
                     print(f"[!] Error checking: {e}")
