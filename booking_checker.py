@@ -8,10 +8,10 @@ from datetime import datetime
 
 # --- CONFIGURATION ---
 # The date you WANT (e.g., 09 Jan 2026)
-TARGET_URL = "https://in.bookmyshow.com/cinemas/hyderabad/aparna-cinemas-nallagandla/buytickets/AACN/20260109"
+TARGET_URL = "https://in.bookmyshow.com/cinemas/hyderabad/aparna-cinemas-nallagandla/buytickets/AACN/20260108"
 
 # The Date part of the URL to strictly verify (e.g. "20260109")
-TARGET_DATE_ID = "20260109"
+TARGET_DATE_ID = "20260108"
 dt = datetime.strptime(TARGET_DATE_ID, "%Y%m%d")
 # formatted_date = dt.strftime("%a %d %b")
 
