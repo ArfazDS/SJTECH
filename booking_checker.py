@@ -3,6 +3,7 @@ import random
 import requests
 from playwright.sync_api import sync_playwright
 import os
+import re
 
 # --- CONFIGURATION ---
 # The date you WANT (e.g., 09 Jan 2026)
@@ -48,9 +49,11 @@ def run():
                     
                     # 2. Get the Final URL after loading
                     final_url = page.url
+                    m = re.search(r"(\d{8})$", final_url)
+                    date_str = m.group(1)
                     
                     # 3. Compare: Did we stay on the Target, or did we get bounced?
-                    if TARGET_DATE_ID in final_url:
+                    if TARGET_DATE_ID in date_str:
                         # --- SUCCESS: WE STAYED ON JAN 09 ---
                         print(f"[!!!] SUCCESS!")
                         send_alert(f"🚨 DATE OPENED! \nLink: {final_url}")
@@ -68,6 +71,7 @@ def run():
                         # Extract the date we were sent to, just for logging
                         redirected_date = final_url.split('/')[-1] if '/' in final_url else "Unknown"
                         print(f"[-] Redirected to {redirected_date}. Target {TARGET_DATE_ID} is still closed.")
+                        send_alert("Date not available yet")
 
                 except Exception as e:
                     print(f"[!] Error checking: {e}")
