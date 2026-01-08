@@ -4,8 +4,8 @@ import os
 from datetime import datetime
 
 # ================= CONFIG =================
-TARGET_URL = "https://in.bookmyshow.com/cinemas/hyderabad/aparna-cinemas-nallagandla/buytickets/AACN/20260109"
-TARGET_DATE_ID = "20260109"
+TARGET_URL = "https://in.bookmyshow.com/cinemas/hyderabad/aparna-cinemas-nallagandla/buytickets/AACN/20260108"
+TARGET_DATE_ID = "20260108"
 
 # Telegram
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "").strip()
