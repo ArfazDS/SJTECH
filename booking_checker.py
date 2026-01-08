@@ -33,7 +33,7 @@ async def run():
         page = await browser.new_page()
 
         print("[*] Opening page...")
-        await page.goto(TARGET_URL, timeout=60000)
+        await page.goto(TARGET_URL, timeout=15000)
         await page.wait_for_timeout(5000)
 
         print("\n=== DATE CELLS FOUND ===\n")
