@@ -18,7 +18,14 @@ MONTH = dt.strftime("%b")
 
 print("TARGET:", DAY, DATE, MONTH)
 
+# =========================================
+
 async def send_alert(msg):
+    if not TELEGRAM_TOKEN or not TELEGRAM_CHAT_ID:
+        print("[Telegram disabled]")
+        print(msg)
+        return
+
     url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
     r = requests.post(url, json={"chat_id": TELEGRAM_CHAT_ID, "text": msg})
     print("Telegram response:", r.text)
@@ -26,14 +33,14 @@ async def send_alert(msg):
 
 async def run():
     async with async_playwright() as p:
-        # browser = await p.chromium.launch(headless=False)
         browser = await p.chromium.launch(
-            headless=True,
+            headless=True,  # MUST be true on GitHub
             args=[
-                "--disable-blink-features=AutomationControlled",
                 "--no-sandbox",
-                "--disable-dev-shm-usage"
-            ]
+                "--disable-dev-shm-usage",
+                "--disable-gpu",
+                "--disable-blink-features=AutomationControlled",
+            ],
         )
 
         context = await browser.new_context(
@@ -43,23 +50,28 @@ async def run():
                 "Chrome/120.0.0.0 Safari/537.36"
             )
         )
+
         page = await context.new_page()
 
-        await page.goto(TARGET_URL)
-        await page.wait_for_timeout(15000)
+        print("[*] Navigating...")
+        await page.goto(TARGET_URL, wait_until="domcontentloaded", timeout=60000)
+        await page.wait_for_timeout(10000)
 
         curr = page.url
+        print("[*] Final URL:", curr)
 
         if TARGET_DATE_ID in curr:
-            print("alert sent")
-            dt = datetime.strptime(TARGET_DATE_ID, "%Y%m%d")
-
-            DAY = dt.strftime("%a")   
-            DATE = dt.strftime("%d")   
-            MONTH = dt.strftime("%b") 
-            
-            await send_alert(f"🚨 DATE OPEN – for {DAY} {DATE} {MONTH}\n"
-            f"GO BOOK NOW! : {curr}")
+            await send_alert(
+                f"🚨 DATE OPEN – GO BOOK NOW!\n"
+                f"{DAY} {DATE} {MONTH}\n"
+                f"{curr}"
+            )
+        else:
+            await send_alert(
+                f"❌ DATE NOT OPEN YET\n"
+                f"{DAY} {DATE} {MONTH}\n"
+                f"Redirected to: {curr}"
+            )
 
         await browser.close()
 
