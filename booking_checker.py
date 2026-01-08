@@ -68,7 +68,7 @@ async def run():
             )
 
 
-        browser.close()
+        await browser.close()
 
 
 await run()
