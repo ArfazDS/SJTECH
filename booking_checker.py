@@ -1,92 +1,90 @@
 import time
 import random
 import requests
-import os
-import re
 from playwright.sync_api import sync_playwright
+import os
 from datetime import datetime
 
 # ================= CONFIG =================
+TARGET_URL = "https://in.bookmyshow.com/cinemas/hyderabad/aparna-cinemas-nallagandla/buytickets/AACN/20260108"
+TARGET_DATE_ID = "20260108"
 
-TARGET_DATE_ID = "20260108"  # YYYYMMDD
-TARGET_URL = f"https://in.bookmyshow.com/cinemas/hyderabad/aparna-cinemas-nallagandla/buytickets/AACN/{TARGET_DATE_ID}"
+CHECK_INTERVAL_MIN = 10
+CHECK_INTERVAL_MAX = 15
 
-CHECK_INTERVAL_MIN = 30
-CHECK_INTERVAL_MAX = 60
-
+# Telegram
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "").strip()
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "").strip()
 
+# Date parts
+dt = datetime.strptime(TARGET_DATE_ID, "%Y%m%d")
+DAY, DATE, MONTH = dt.strftime("%a"), dt.strftime("%d"), dt.strftime("%b")
+
 # ==========================================
 
-dt = datetime.strptime(TARGET_DATE_ID, "%Y%m%d")
-FORMATTED_DATE = dt.strftime("%a %d %b %Y")
-
-def send_telegram(msg: str):
+def send_alert(msg):
     url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
-    response = requests.post(
-        url,
-        json={"chat_id": TELEGRAM_CHAT_ID, "text": msg},
-        timeout=10
-    )
-    print("Telegram:", response.text)
+    requests.post(url, json={"chat_id": TELEGRAM_CHAT_ID, "text": msg})
 
-def main():
-    print("[*] BookMyShow Date Monitor Started")
-    print("[*] Target URL:", TARGET_URL)
 
-    send_telegram(f"🤖 Monitoring started for {FORMATTED_DATE}")
-
+def run():
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         context = browser.new_context(
-            user_agent=(
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) "
-                "Chrome/120.0.0.0 Safari/537.36"
-            )
+            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
         )
         page = context.new_page()
 
+        print("[*] Monitoring started")
+        send_alert(f"🤖 Monitoring {DAY} {DATE} {MONTH}")
+
         try:
             while True:
-                try:
-                    page.goto(TARGET_URL, wait_until="domcontentloaded", timeout=30000)
+                page.goto(TARGET_URL, wait_until="domcontentloaded", timeout=30000)
 
-                    final_url = page.url
-                    match = re.search(r"(\d{8})$", final_url)
+                date_divs = page.query_selector_all("div.sc-h5edv-0")
+                matched = False
 
-                    # ---------- Redirect check ----------
-                    if not match or match.group(1) != TARGET_DATE_ID:
-                        print("[-] Redirected → date not open")
+                for div in date_divs:
+                    span_day = div.query_selector("span.sc-h5edv-1.lbMdAA")
+                    span_date = div.query_selector("span.sc-h5edv-2.hdBsYM")
+                    span_month = div.query_selector("span.sc-h5edv-3.WDdWY")
 
-                    else:
-                        # ---------- Showtime detection ----------
-                        showtimes = page.query_selector_all(
-                            "a[data-id='showtime'], button[data-testid='showtime']"
-                        )
+                    if not (span_day and span_date and span_month):
+                        continue
 
-                        if showtimes:
-                            send_telegram(
-                                f"🚨 BOOKINGS OPEN!\n\n"
-                                f"Date: {FORMATTED_DATE}\n"
-                                f"Link: {final_url}"
+                    if (
+                        span_day.inner_text().strip() == DAY and
+                        span_date.inner_text().strip() == DATE and
+                        span_month.inner_text().strip() == MONTH
+                    ):
+                        matched = True
+                        div_class = div.get_attribute("class") or ""
+
+                        if "cmkkZb" in div_class:
+                            print("[-] Date found but NOT active")
+                            send_alert(
+                                f"❌ DATE NOT ACTIVE YET\n"
+                                f"{DAY} {DATE} {MONTH}"
                             )
-                            break
                         else:
-                            print("[-] Date visible but no shows yet")
+                            print("[!!!] DATE ACTIVE")
+                            send_alert(
+                                f"🚨 DATE ACTIVE – GO BOOK NOW!\n"
+                                f"{DAY} {DATE} {MONTH}\n"
+                                f"{page.url}"
+                            )
+                            return  # STOP SCRIPT AFTER SUCCESS
+                        break
 
-                except Exception as e:
-                    print("[!] Error:", e)
+                if not matched:
+                    print("[-] Date not visible yet")
 
-                sleep_time = random.randint(CHECK_INTERVAL_MIN, CHECK_INTERVAL_MAX)
-                time.sleep(sleep_time)
-
-        except KeyboardInterrupt:
-            print("Stopped by user")
+                time.sleep(random.randint(CHECK_INTERVAL_MIN, CHECK_INTERVAL_MAX))
 
         finally:
             browser.close()
 
+
 if __name__ == "__main__":
-    main()
+    run()
