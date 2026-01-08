@@ -36,30 +36,43 @@ def run():
 
         page.goto(TARGET_URL, wait_until="domcontentloaded", timeout=30000)
 
-        inactive_divs = page.query_selector_all("div.sc-h5edv-0.cmkkZb")
+        # --- DATE VISIBILITY CHECK ---
 
-        date_still_inactive = False
-
-        for div in inactive_divs:
+        inactive_found = False
+        active_found = False
+        
+        date_divs = page.query_selector_all("div.sc-h5edv-0")
+        
+        for div in date_divs:
+            div_class = div.get_attribute("class") or ""
             text = div.inner_text()
-
+        
             if DAY in text and DATE in text and MONTH in text:
-                date_still_inactive = True
-                break
-
-        if date_still_inactive:
-            print("[-] Date NOT active yet")
-            send_alert(
-                f"❌ DATE NOT ACTIVE YET\n"
-                f"{DAY} {DATE} {MONTH}"
-            )
-        else:
-            print("[!!!] DATE OPEN")
+                if "cmkkZb" in div_class:
+                    inactive_found = True
+                else:
+                    active_found = True
+        
+        # --- DECISION ---
+        if active_found:
             send_alert(
                 f"🚨 DATE OPEN – GO BOOK NOW!\n"
                 f"{DAY} {DATE} {MONTH}\n"
                 f"{page.url}"
             )
+        
+        elif inactive_found:
+            send_alert(
+                f"❌ DATE NOT ACTIVE YET\n"
+                f"{DAY} {DATE} {MONTH}"
+            )
+        
+        else:
+            send_alert(
+                f"⚠️ DATE NOT VISIBLE YET (Likely redirected)\n"
+                f"{DAY} {DATE} {MONTH}"
+            )
+
 
         browser.close()
 
