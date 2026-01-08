@@ -34,38 +34,40 @@ def run():
 
         print("[*] Checking date status")
 
-        page.goto(TARGET_URL, wait_until="domcontentloaded", timeout=30000)
+        page.goto(TARGET_URL)
+        page.wait_for_timeout(15000)
 
         # --- DATE VISIBILITY CHECK ---
+        print("\n=== DATE CELLS FOUND ===\n")
 
-        inactive_found = False
-        active_found = False
-        
-        date_divs = page.query_selector_all("div.sc-h5edv-0")
-        
-        for div in date_divs:
-            div_class = div.get_attribute("class") or ""
-            text = div.inner_text()
-        
-            if DAY in text and DATE in text and MONTH in text:
-                if "cmkkZb" in div_class:
-                    inactive_found = True
-                else:
-                    active_found = True
+        date_divs = await page.query_selector_all("div.sc-h5edv-0")
+
+        for i, div in enumerate(date_divs, 1):
+            div_class = await div.get_attribute("class") or ""
+
+            span_day = await div.query_selector("span.sc-h5edv-1")
+            span_date = await div.query_selector("span.sc-h5edv-2")
+            span_month = await div.query_selector("span.sc-h5edv-3")
+
+            day = (await span_day.inner_text()).strip() if span_day else "N/A"
+            date = (await span_date.inner_text()).strip() if span_date else "N/A"
+            month = (await span_month.inner_text()).strip() if span_month else "N/A"
+
+            status = "INACTIVE" if "cmkkZb" in div_class else "ACTIVE"
         
         # --- DECISION ---
-        if active_found:
+        if status=="ACTIVE":
             send_alert(
                 f"🚨 DATE OPEN – GO BOOK NOW!\n"
                 f"{DAY} {DATE} {MONTH}\n"
                 f"{page.url}"
             )
         
-        elif inactive_found:
-            send_alert(
-                f"❌ DATE NOT ACTIVE YET\n"
-                f"{DAY} {DATE} {MONTH}"
-            )
+        # elif inactive_found:
+        #     send_alert(
+        #         f"❌ DATE NOT ACTIVE YET\n"
+        #         f"{DAY} {DATE} {MONTH}"
+        #     )
         
         else:
             send_alert(
