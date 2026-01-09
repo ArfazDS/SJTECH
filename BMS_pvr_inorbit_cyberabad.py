@@ -6,7 +6,7 @@ from playwright.sync_api import sync_playwright
 # ================= CONFIG =================
 TARGET_DATE_ID = "20260109"
 TARGET_URL = f"https://in.bookmyshow.com/cinemas/hyderabad/pvr-inorbit-cyberabad/buytickets/PIIC/{TARGET_DATE_ID}"
-Movie_Name = "The Raja Saab"
+Movie_Name = "The Housemaid"
 
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "").strip()
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "").strip()
