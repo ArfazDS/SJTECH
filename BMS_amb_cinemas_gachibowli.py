@@ -4,7 +4,7 @@ from datetime import datetime
 from playwright.sync_api import sync_playwright
 
 # ================= CONFIG =================
-TARGET_DATE_ID = "20260109"
+TARGET_DATE_ID = "20260111"
 TARGET_URL = f"https://in.bookmyshow.com/cinemas/hyderabad/amb-cinemas-gachibowli/buytickets/AMBH/{TARGET_DATE_ID}"
 Movie_Name = "The Raja Saab"
 Language = "Hindi"
