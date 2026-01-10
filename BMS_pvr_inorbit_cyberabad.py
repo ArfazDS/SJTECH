@@ -6,8 +6,8 @@ from playwright.sync_api import sync_playwright
 # ================= CONFIG =================
 TARGET_DATE_ID = "20260111"
 TARGET_URL = f"https://in.bookmyshow.com/cinemas/hyderabad/pvr-inorbit-cyberabad/buytickets/PIIC/{TARGET_DATE_ID}"
-Movie_Name = "The Raja Saab"
-Language = "Hindi"
+Movie_Name = "The Housemaid"
+Language = "English"
 
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "").strip()
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "").strip()
@@ -68,26 +68,26 @@ def run():
                 f"{curr}"
             )
 
-        elif TARGET_DATE_ID in curr and movie_found and not language_found:
-            send_alert(
-                f"⚠️ DATE OPEN & {Movie_Name} FOUND, but ({Language}) NOT AVAILABLE\n"
-                f"{DAY} {DATE} {MONTH}\n"
-                f"{curr}"
-            )
+        # elif TARGET_DATE_ID in curr and movie_found and not language_found:
+        #     send_alert(
+        #         f"⚠️ DATE OPEN & {Movie_Name} FOUND, but ({Language}) NOT AVAILABLE\n"
+        #         f"{DAY} {DATE} {MONTH}\n"
+        #         f"{curr}"
+        #     )
 
-        elif TARGET_DATE_ID in curr and not movie_found:
-            send_alert(
-                f"🚨 DATE OPEN, but {Movie_Name} NOT LISTED YET\n"
-                f"{DAY} {DATE} {MONTH}\n"
-                f"{curr}"
-            )
+        # elif TARGET_DATE_ID in curr and not movie_found:
+        #     send_alert(
+        #         f"🚨 DATE OPEN, but {Movie_Name} NOT LISTED YET\n"
+        #         f"{DAY} {DATE} {MONTH}\n"
+        #         f"{curr}"
+        #     )
 
-        else:
-            send_alert(
-                f"❌ DATE NOT OPEN YET\n"
-                f"{DAY} {DATE} {MONTH}\n"
-                f"Redirected to: {curr}"
-            )
+        # else:
+        #     send_alert(
+        #         f"❌ DATE NOT OPEN YET\n"
+        #         f"{DAY} {DATE} {MONTH}\n"
+        #         f"Redirected to: {curr}"
+        #     )
         
         browser.close()
 
