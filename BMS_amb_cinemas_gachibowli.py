@@ -3,6 +3,7 @@ import time as time_module
 from datetime import datetime, time
 from playwright.sync_api import sync_playwright
 import re
+import os
 
 # ================= CONFIG =================
 TARGET_DATE_ID = "20260111"
