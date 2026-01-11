@@ -6,6 +6,17 @@ import re
 
 # ================= CONFIG =================
 TARGET_DATE_ID = "20260111"
+# -------- PRE-FLIGHT DATE CHECK --------
+target_date = datetime.strptime(TARGET_DATE_ID, "%Y%m%d").date()
+today = date.today()
+
+if target_date < today:
+    print(
+        f"[SKIPPED] Target date {target_date} has already passed. "
+        f"Today is {today}. Exiting."
+    )
+    exit(0)
+
 TARGET_URL = f"https://in.bookmyshow.com/cinemas/hyderabad/aparna-cinemas-nallagandla/buytickets/AACN/{TARGET_DATE_ID}"
 Movie_Name = "The Housemaid"
 Language = "English"
