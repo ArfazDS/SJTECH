@@ -3,6 +3,7 @@ import time as time_module
 from datetime import datetime, time
 from playwright.sync_api import sync_playwright
 import re
+import os
 
 # ================= CONFIG =================
 TARGET_DATE_ID = "20260111"
@@ -23,8 +24,8 @@ Movie_Name = "The Housemaid"
 Language = "English"
 SEAT_TYPE = "RECLINER"
 
-TELEGRAM_TOKEN = "8263034254:AAFUuLLB6a5XqG9R7PZVZkH1vNQQivfhn6U"
-TELEGRAM_CHAT_ID = "684803039"
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "").strip()
+TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "").strip()
 dt = datetime.strptime(TARGET_DATE_ID, "%Y%m%d")
 DAY = dt.strftime("%a")
 DATE = dt.strftime("%d")
