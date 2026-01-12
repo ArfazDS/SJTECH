@@ -1,12 +1,20 @@
 import requests
 import time as time_module
-from datetime import datetime, time
+from datetime import datetime, time, date
 from playwright.sync_api import sync_playwright
 import re
 import os
+import json
 
 # ================= CONFIG =================
-TARGET_DATE_ID = "20260111"
+# TARGET_DATE_ID = "20260111"
+with open("config.json", "r") as f:
+    config = json.load(f)
+
+TARGET_DATE_ID = config["TARGET_DATE_ID"]
+Movie_Name = config["MOVIE_NAME"]
+Language = config["LANGUAGE"]
+
 # -------- PRE-FLIGHT DATE CHECK --------
 target_date = datetime.strptime(TARGET_DATE_ID, "%Y%m%d").date()
 today = date.today()
@@ -19,8 +27,8 @@ if target_date < today:
     exit(0)
 
 TARGET_URL = f"https://in.bookmyshow.com/cinemas/hyderabad/amb-cinemas-gachibowli/buytickets/AMBH/{TARGET_DATE_ID}"
-Movie_Name = "The Housemaid"
-Language = "English"
+# Movie_Name = "The Housemaid"
+# Language = "English"
 SEAT_TYPE = "PLATINUM"
 
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "").strip()
