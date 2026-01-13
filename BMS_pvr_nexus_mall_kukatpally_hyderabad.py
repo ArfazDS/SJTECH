@@ -37,7 +37,7 @@ dt = datetime.strptime(TARGET_DATE_ID, "%Y%m%d")
 DAY = dt.strftime("%a")
 DATE = dt.strftime("%d")
 MONTH = dt.strftime("%b")
-START_TIME = time(11, 0)   # 11:00 AM
+START_TIME = time(10, 0)   # 11:00 AM
 END_TIME = time(16, 0)     # 4:00 PM
 # =========================================
 
