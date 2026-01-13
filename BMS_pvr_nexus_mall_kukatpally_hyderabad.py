@@ -26,7 +26,7 @@ if target_date < today:
     )
     exit(0)
 
-TARGET_URL = f"https://in.bookmyshow.com/cinemas/hyderabad/pvr-inorbit-cyberabad/buytickets/PIIC/{TARGET_DATE_ID}"
+TARGET_URL = f"https://in.bookmyshow.com/cinemas/hyderabad/pvr-nexus-mall-kukatpally-hyderabad/buytickets/PVFS/{TARGET_DATE_ID}"
 # Movie_Name = "The Housemaid"
 # Language = "English"
 SEAT_TYPE = "RECLINER"
