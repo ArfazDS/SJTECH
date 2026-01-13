@@ -1,6 +1,6 @@
 import requests
 import time as time_module
-from datetime import datetime, time
+from datetime import datetime, time, date
 from playwright.sync_api import sync_playwright
 import re
 import os
