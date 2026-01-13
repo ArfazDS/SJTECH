@@ -27,8 +27,8 @@ if target_date < today:
     exit(0)
 
 TARGET_URL = f"https://in.bookmyshow.com/cinemas/hyderabad/aparna-cinemas-nallagandla/buytickets/AACN/{TARGET_DATE_ID}"
-Movie_Name = "The Housemaid"
-Language = "English"
+# Movie_Name = "The Housemaid"
+# Language = "English"
 SEAT_TYPE = "GOLD"
 
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "").strip()
