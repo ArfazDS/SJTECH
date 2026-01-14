@@ -124,8 +124,8 @@ def run():
                     # --- CLICK SHOW TIME ---
                     show.click()
                     if page.get_by_text("Continue").is_visible():
-                        page.get_by_text("Accept").click()
-                    page.wait_for_timeout(7000)
+                        page.get_by_text("Continue").click()
+                    page.wait_for_timeout(5000)
 
                     # --- CHECK SEAT TYPE ---
                     seat_items = page.locator("li.sc-1atac75-2.LTrUk")
