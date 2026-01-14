@@ -21,6 +21,8 @@ with open("config.json", "r") as f:
 TARGET_DATE_ID = config["TARGET_DATE_ID"]
 Movie_Name = config["MOVIE_NAME"]
 Language = config["LANGUAGE"]
+Str_Time = config["Str_Time"]
+End_Time = config["End_Time"]
 
 # -------- PRE-FLIGHT DATE CHECK --------
 target_date = datetime.strptime(TARGET_DATE_ID, "%Y%m%d").date()
@@ -42,8 +44,8 @@ dt = datetime.strptime(TARGET_DATE_ID, "%Y%m%d")
 DAY = dt.strftime("%a")
 DATE = dt.strftime("%d")
 MONTH = dt.strftime("%b")
-START_TIME = time(10, 0)   # 11:00 AM
-END_TIME = time(16, 0)     # 4:00 PM
+START_TIME = time(int(Str_Time), 0)   # 11:00 AM
+END_TIME = time(int(End_Time), 0)     # 4:00 PM
 SEATS_TO_SELECT = 1
 # =========================================
 def send_alert(msg):
@@ -212,6 +214,7 @@ def run():
                         
                                 print("Taking canvas screenshot...")
                                 png_bytes = canvas_el.screenshot()
+                                seatmap_screenshot = png_bytes
                         
                                 targets, img_w, img_h = find_recliner_seats(png_bytes, SEATS_TO_SELECT)
                         
@@ -295,6 +298,14 @@ def run():
                 f"{SEAT_TYPE} Timings: {timings_str}\n"
                 f"{curr}"
             )
+            # Send screenshot if available
+            try:
+                send_telegram_photo(
+                    seatmap_screenshot,
+                    caption="🎟️ Seat layout snapshot"
+                )
+            except Exception as e:
+                print("Failed to send screenshot:", e)
 
         browser.close()
 
