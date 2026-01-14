@@ -33,7 +33,7 @@ if target_date < today:
     exit(0)
 
 TARGET_URL = f"https://in.bookmyshow.com/cinemas/hyderabad/amb-cinemas-gachibowli/buytickets/AMBH/{TARGET_DATE_ID}"
-SEAT_TYPE = "GOLD"
+SEAT_TYPE = "PLATINUM"
 
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "").strip()
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "").strip()
