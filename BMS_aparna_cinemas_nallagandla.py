@@ -18,6 +18,8 @@ with open("config.json", "r") as f:
 TARGET_DATE_ID = config["TARGET_DATE_ID"]
 Movie_Name = config["MOVIE_NAME"]
 Language = config["LANGUAGE"]
+Str_Time = config["Str_Time"]
+End_Time = config["End_Time"]
 
 # -------- PRE-FLIGHT DATE CHECK --------
 target_date = datetime.strptime(TARGET_DATE_ID, "%Y%m%d").date()
@@ -88,6 +90,27 @@ def find_recliner_seats(screenshot_bytes, max_seats):
                 if not too_close:
                     found_seats.append((x + 10, y + 10))
     return found_seats, width, height
+
+def send_telegram_photo(photo_bytes, caption=None):
+    if not TELEGRAM_TOKEN or not TELEGRAM_CHAT_ID:
+        print("[Telegram disabled] Photo not sent")
+        return
+
+    url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendPhoto"
+
+    files = {
+        "photo": ("seats.png", photo_bytes)
+    }
+
+    data = {
+        "chat_id": TELEGRAM_CHAT_ID
+    }
+
+    if caption:
+        data["caption"] = caption
+
+    r = requests.post(url, data=data, files=files, timeout=20)
+    print("Telegram photo response:", r.text)
 
 def run():
     with sync_playwright() as p:
@@ -209,6 +232,7 @@ def run():
                         
                                 print("Taking canvas screenshot...")
                                 png_bytes = canvas_el.screenshot()
+                                seatmap_screenshot = png_bytes
                         
                                 targets, img_w, img_h = find_recliner_seats(png_bytes, SEATS_TO_SELECT)
                         
@@ -292,6 +316,14 @@ def run():
                 f"{SEAT_TYPE} Timings: {timings_str}\n"
                 f"{curr}"
             )
+            # Send screenshot if available
+            try:
+                send_telegram_photo(
+                    seatmap_screenshot,
+                    caption="🎟️ Seat layout snapshot"
+                )
+            except Exception as e:
+                print("Failed to send screenshot:", e)
 
         browser.close()
 
