@@ -41,8 +41,8 @@ dt = datetime.strptime(TARGET_DATE_ID, "%Y%m%d")
 DAY = dt.strftime("%a")
 DATE = dt.strftime("%d")
 MONTH = dt.strftime("%b")
-START_TIME = time(10, 0)   # 11:00 AM
-END_TIME = time(16, 0)     # 4:00 PM
+START_TIME = time(int(Str_Time), 0)   # 11:00 AM
+END_TIME = time(int(End_Time), 0)     # 4:00 PM
 SEATS_TO_SELECT = 1
 # =========================================
 def send_alert(msg):
