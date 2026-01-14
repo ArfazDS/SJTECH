@@ -8,7 +8,6 @@ import json
 import random
 
 # ================= CONFIG =================
-# TARGET_DATE_ID = "20260111"
 with open("config.json", "r") as f:
     config = json.load(f)
 
@@ -28,8 +27,6 @@ if target_date < today:
     exit(0)
 
 TARGET_URL = f"https://in.bookmyshow.com/cinemas/hyderabad/pvr-nexus-mall-kukatpally-hyderabad/buytickets/PVFS/{TARGET_DATE_ID}"
-# Movie_Name = "The Housemaid"
-# Language = "English"
 SEAT_TYPE = "RECLINER"
 
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "").strip()
@@ -41,14 +38,6 @@ MONTH = dt.strftime("%b")
 START_TIME = time(10, 0)   # 11:00 AM
 END_TIME = time(16, 0)     # 4:00 PM
 # =========================================
-
-# --- RANDOMIZED USER AGENTS ---
-user_agents = [
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_2_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Safari/605.1.15",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"
-]
-
 def send_alert(msg):
     if not TELEGRAM_TOKEN or not TELEGRAM_CHAT_ID:
         print("[Telegram disabled]")
@@ -66,40 +55,14 @@ def parse_time(t):
 
 def run():
     with sync_playwright() as p:
-        # browser = p.chromium.launch(headless=True)
-        browser = p.chromium.launch(
-            headless=False,
-            channel="chrome",  # Uses your system Google Chrome (Must be installed!)
-            args=[
-                "--disable-blink-features=AutomationControlled", # Hides the 'Automation' flag
-                "--no-sandbox", 
-                "--disable-infobars"
-            ]
-        )
-        # context = browser.new_context(
-        #     user_agent=(
-        #         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-        #         "AppleWebKit/537.36 (KHTML, like Gecko) "
-        #         "Chrome/120.0.0.0 Safari/537.36"
-        #     )
-        # )
-        # page = context.new_page()
-        ua = random.choice(user_agents)
+        browser = p.chromium.launch(headless=True)
         context = browser.new_context(
-            user_agent=ua,
-            viewport={"width": 1280, "height": 800},
-            locale="en-IN",       # Match IP location (India)
-            timezone_id="Asia/Kolkata" 
+            user_agent=(
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                "AppleWebKit/537.36 (KHTML, like Gecko) "
+                "Chrome/120.0.0.0 Safari/537.36"
+            )
         )
-
-        # --- EVASION TECHNIQUE 2: REMOVE 'navigator.webdriver' ---
-        # This script runs on every page load before any other code
-        context.add_init_script("""
-            Object.defineProperty(navigator, 'webdriver', {
-                get: () => undefined
-            });
-        """)
-
         page = context.new_page()
         print("[*] Navigating...")
         page.goto(TARGET_URL)
