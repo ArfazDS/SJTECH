@@ -9,6 +9,7 @@ from PIL import Image
 import time as time_module
 import io
 import math
+import re
 
 # ================= CONFIG =================
 with open("config.json", "r") as f:
@@ -40,8 +41,8 @@ dt = datetime.strptime(TARGET_DATE_ID, "%Y%m%d")
 DAY = dt.strftime("%a")
 DATE = dt.strftime("%d")
 MONTH = dt.strftime("%b")
-START_TIME = time(Str_Time, 0)   # 11:00 AM
-END_TIME = time(End_Time, 0)     # 4:00 PM
+START_TIME = time(int(Str_Time), 0)   # 11:00 AM
+END_TIME = time(int(End_Time), 0)     # 4:00 PM
 SEATS_TO_SELECT = 1
 # =========================================
 def send_alert(msg):
