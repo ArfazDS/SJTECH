@@ -265,7 +265,7 @@ def run():
                                         page.get_by_text("Accept").click()
                                         print("Clicked Accept Button")
                                     except:
-                                        print("Could not click Accept)
+                                        print("Could not click Accept")
                                     page.wait_for_timeout(3000)
                                     try:
                                         page.get_by_text("Skip").click()
