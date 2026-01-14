@@ -9,6 +9,9 @@ import random
 import asyncio
 from PIL import Image
 import asyncio
+import time
+import io
+import math
 
 # ================= CONFIG =================
 with open("config.json", "r") as f:
@@ -40,6 +43,7 @@ DATE = dt.strftime("%d")
 MONTH = dt.strftime("%b")
 START_TIME = time(10, 0)   # 11:00 AM
 END_TIME = time(16, 0)     # 4:00 PM
+SEATS_TO_SELECT = 1
 # =========================================
 def send_alert(msg):
     if not TELEGRAM_TOKEN or not TELEGRAM_CHAT_ID:
@@ -89,7 +93,16 @@ def find_recliner_seats(screenshot_bytes, max_seats):
 
 def run():
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        # browser = p.chromium.launch(headless=True)
+        browser = p.chromium.launch(
+            headless=True,
+            args=[
+                "--disable-dev-shm-usage",
+                "--no-sandbox",
+                "--disable-gpu",
+            ]
+        )
+
         context = browser.new_context(
             user_agent=(
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -171,33 +184,33 @@ def run():
                         if SEAT_TYPE.upper() in seat_text:
                             if "SOLD OUT" not in seat_text:
                                 seat_available = True
-                                await page.get_by_role("slider").fill("1")
-                                await page.get_by_label("Select Seats").click()
-                                await page.wait_for_timeout(5000)
+                                page.get_by_role("slider").fill("1")
+                                page.get_by_label("Select Seats").click()
+                                page.wait_for_timeout(5000)
                         
                                 # --- CANVAS LOGIC ---
                                 canvas_selector = ".konvajs-content canvas"
                                 print("Waiting for seat map canvas...")
                         
                                 try:
-                                    await page.wait_for_selector(canvas_selector, state="visible", timeout=20000)
-                                    await page.evaluate("window.scrollTo(0, 0)")
-                                    await asyncio.sleep(3) 
+                                    page.wait_for_selector(canvas_selector, state="visible", timeout=20000)
+                                    page.evaluate("window.scrollTo(0, 0)")
+                                    time.sleep(3) 
                                 except:
                                     print("Canvas not found or blocked.")
-                                    await browser.close()
+                                    browser.close()
                                     return
                         
                                 canvas_el = page.locator(canvas_selector).first
-                                canvas_box = await canvas_el.bounding_box()
+                                canvas_box = canvas_el.bounding_box()
                         
                                 if not canvas_box:
                                     print("Canvas box missing.")
-                                    await browser.close()
+                                    browser.close()
                                     return
                         
                                 print("Taking canvas screenshot...")
-                                png_bytes = await canvas_el.screenshot()
+                                png_bytes = canvas_el.screenshot()
                         
                                 targets, img_w, img_h = find_recliner_seats(png_bytes, SEATS_TO_SELECT)
                         
@@ -217,25 +230,25 @@ def run():
                                         jitter_y = random.randint(-2, 2)
                         
                                         print(f"Clicking Recliner {i+1}...")
-                                        await page.mouse.move(abs_x + jitter_x, abs_y + jitter_y, steps=5)
-                                        await page.mouse.click(abs_x + jitter_x, abs_y + jitter_y)
-                                        await asyncio.sleep(random.uniform(0.3, 0.7)) 
+                                        page.mouse.move(abs_x + jitter_x, abs_y + jitter_y, steps=5)
+                                        page.mouse.click(abs_x + jitter_x, abs_y + jitter_y)
+                                        time.sleep(random.uniform(0.3, 0.7)) 
                         
                                     # --- PAY BUTTON ---
-                                    await asyncio.sleep(1)
+                                    time.sleep(1)
                                     
-                                    await page.get_by_label("Pay ₹").click()
+                                    page.get_by_label("Pay ₹").click()
                                     print("Clicked Pay Button")
-                                    await page.get_by_text("Accept").click()
+                                    page.get_by_text("Accept").click()
                                     print("Clicked Accept Button")
                                     
-                                    await page.get_by_text("Skip").click()
-                                    await page.wait_for_timeout(3000)
-                                    await page.get_by_placeholder("eg: abc@gmail.com").fill("khan@gmail.com")
-                                    await page.get_by_placeholder("eg: 91480XXXXX").click()
-                                    await page.get_by_placeholder("eg: 91480XXXXX").fill("9876543210")
-                                    await page.get_by_label("Submit").click()
-                                    await page.wait_for_timeout(5000)
+                                    page.get_by_text("Skip").click()
+                                    page.wait_for_timeout(3000)
+                                    page.get_by_placeholder("eg: abc@gmail.com").fill("khan@gmail.com")
+                                    page.get_by_placeholder("eg: 91480XXXXX").click()
+                                    page.get_by_placeholder("eg: 91480XXXXX").fill("9876543210")
+                                    page.get_by_label("Submit").click()
+                                    page.wait_for_timeout(5000)
                             break
 
                     # --- GO BACK ---
