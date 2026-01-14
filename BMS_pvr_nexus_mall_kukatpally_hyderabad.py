@@ -242,8 +242,12 @@ def run():
                                     print("Clicked Pay Button")
                                     page.get_by_text("Accept").click()
                                     print("Clicked Accept Button")
-                                    
-                                    page.get_by_text("Skip").click()
+                                    page.wait_for_timeout(3000)
+                                    try:
+                                        page.get_by_text("Skip").click()
+                                    except:
+                                        print("Couldn't click Skip)
+                                            
                                     page.wait_for_timeout(3000)
                                     page.get_by_placeholder("eg: abc@gmail.com").fill("khan@gmail.com")
                                     page.get_by_placeholder("eg: 91480XXXXX").click()
