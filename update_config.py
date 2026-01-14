@@ -4,7 +4,7 @@ import base64
 import requests
 
 # ========== ENV ==========
-GITHUB_TOKEN = os.getenv("GITHUB_TOKEN_CUSTOM")
+GITHUB_TOKEN = os.getenv("GIT_TOKEN_CUSTOM")
 REPO_OWNER = "ArfazDS"
 REPO_NAME = "SJTECH"
 FILE_PATH = "config.json"
