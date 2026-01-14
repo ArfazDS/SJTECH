@@ -261,8 +261,11 @@ def run():
                                     
                                     page.get_by_label("Pay ₹").click()
                                     print("Clicked Pay Button")
-                                    page.get_by_text("Accept").click()
-                                    print("Clicked Accept Button")
+                                    try:
+                                        page.get_by_text("Accept").click()
+                                        print("Clicked Accept Button")
+                                    except:
+                                        print("Coould not click Accept")
                                     page.wait_for_timeout(3000)
                                     try:
                                         page.get_by_text("Skip").click()
