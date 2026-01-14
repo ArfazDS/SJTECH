@@ -17,6 +17,8 @@ with open("config.json", "r") as f:
 TARGET_DATE_ID = config["TARGET_DATE_ID"]
 Movie_Name = config["MOVIE_NAME"]
 Language = config["LANGUAGE"]
+Str_Time = config["Str_Time"]
+End_Time = config["End_Time"]
 
 # -------- PRE-FLIGHT DATE CHECK --------
 target_date = datetime.strptime(TARGET_DATE_ID, "%Y%m%d").date()
@@ -38,8 +40,8 @@ dt = datetime.strptime(TARGET_DATE_ID, "%Y%m%d")
 DAY = dt.strftime("%a")
 DATE = dt.strftime("%d")
 MONTH = dt.strftime("%b")
-START_TIME = time(10, 0)   # 11:00 AM
-END_TIME = time(23, 0)     # 4:00 PM
+START_TIME = time(Str_Time, 0)   # 11:00 AM
+END_TIME = time(End_Time, 0)     # 4:00 PM
 SEATS_TO_SELECT = 1
 # =========================================
 def send_alert(msg):
