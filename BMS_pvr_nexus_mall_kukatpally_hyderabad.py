@@ -123,6 +123,8 @@ def run():
 
                     # --- CLICK SHOW TIME ---
                     show.click()
+                    if page.get_by_text("Continue").is_visible():
+                        page.get_by_text("Accept").click()
                     page.wait_for_timeout(7000)
 
                     # --- CHECK SEAT TYPE ---
