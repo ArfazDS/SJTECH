@@ -9,7 +9,7 @@ import random
 import asyncio
 from PIL import Image
 import asyncio
-import time
+import time as time_module
 import io
 import math
 from PIL import Image
@@ -196,7 +196,7 @@ def run():
                                 try:
                                     page.wait_for_selector(canvas_selector, state="visible", timeout=20000)
                                     page.evaluate("window.scrollTo(0, 0)")
-                                    time.sleep(3) 
+                                    time_module.sleep(3) 
                                 except:
                                     print("Canvas not found or blocked.")
                                     browser.close()
@@ -233,10 +233,10 @@ def run():
                                         print(f"Clicking Recliner {i+1}...")
                                         page.mouse.move(abs_x + jitter_x, abs_y + jitter_y, steps=5)
                                         page.mouse.click(abs_x + jitter_x, abs_y + jitter_y)
-                                        time.sleep(random.uniform(0.3, 0.7)) 
+                                        time_module.sleep(random.uniform(0.3, 0.7)) 
                         
                                     # --- PAY BUTTON ---
-                                    time.sleep(1)
+                                    time_module.sleep(1)
                                     
                                     page.get_by_label("Pay ₹").click()
                                     print("Clicked Pay Button")
