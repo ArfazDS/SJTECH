@@ -12,6 +12,7 @@ import asyncio
 import time
 import io
 import math
+from PIL import Image
 
 # ================= CONFIG =================
 with open("config.json", "r") as f:
