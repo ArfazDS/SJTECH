@@ -246,7 +246,7 @@ def run():
                                     try:
                                         page.get_by_text("Skip").click()
                                     except:
-                                        print("Couldn't click Skip")
+                                        print("Could not click Skip")
                                             
                                     page.wait_for_timeout(3000)
                                     page.get_by_placeholder("eg: abc@gmail.com").fill("khan@gmail.com")
