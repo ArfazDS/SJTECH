@@ -249,10 +249,22 @@ def run():
                                         print("Could not click Skip")
                                             
                                     page.wait_for_timeout(3000)
-                                    page.get_by_placeholder("eg: abc@gmail.com").fill("khan@gmail.com")
-                                    page.get_by_placeholder("eg: 91480XXXXX").click()
-                                    page.get_by_placeholder("eg: 91480XXXXX").fill("9876543210")
-                                    page.get_by_label("Submit").click()
+                                    try:
+                                        page.get_by_placeholder("eg: abc@gmail.com").fill("khan@gmail.com")
+                                    except:
+                                        print("Could not enter mail ID")
+                                    try:
+                                        page.get_by_placeholder("eg: 91480XXXXX").click()
+                                    except:
+                                        print("Could not click Phone number field")
+                                    try:
+                                        page.get_by_placeholder("eg: 91480XXXXX").fill("9876543210")
+                                    except:
+                                        print("Could not enter Phone number")
+                                    try:
+                                        page.get_by_label("Submit").click()
+                                    except:
+                                        print("Could not click Submit")
                                     page.wait_for_timeout(5000)
                             break
 
