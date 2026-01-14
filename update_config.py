@@ -16,6 +16,35 @@ API_BASE = "https://api.github.com"
 
 
 # ========== TELEGRAM ==========
+def parse_update_command(text):
+    """
+    Expected format:
+    /update YYYYMMDD Language Movie Name
+    """
+    parts = text.split()
+
+    if parts[0] != "/update" or len(parts) < 4:
+        raise ValueError("Invalid command format")
+
+    return {
+        "TARGET_DATE_ID": parts[1],
+        "LANGUAGE": parts[2],
+        "MOVIE_NAME": " ".join(parts[3:])
+    }
+
+
+def get_latest_telegram_message():
+    url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/getUpdates"
+    r = requests.get(url, timeout=10)
+    r.raise_for_status()
+
+    updates = r.json()["result"]
+    if not updates:
+        return None
+
+    return updates[-1]["message"]["text"]
+
+
 def send_telegram(msg):
     url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
     requests.post(
@@ -63,14 +92,24 @@ def update_config(new_values):
 # ========== MAIN ==========
 if __name__ == "__main__":
     try:
-        update_config({
-            "TARGET_DATE_ID": "20260116",
-            "MOVIE_NAME": "The Housemaid",
-            "LANGUAGE": "English"
-        })
+        msg = get_latest_telegram_message()
 
-        send_telegram("✅ config.json updated successfully")
+        if not msg:
+            send_telegram("⚠️ No Telegram message found")
+            exit(0)
+
+        values = parse_update_command(msg)
+
+        update_config(values)
+
+        send_telegram(
+            "✅ config.json updated\n"
+            f"Date: {values['TARGET_DATE_ID']}\n"
+            f"Language: {values['LANGUAGE']}\n"
+            f"Movie: {values['MOVIE_NAME']}"
+        )
 
     except Exception as e:
         send_telegram(f"❌ Failed to update config.json\n{e}")
         raise
+
