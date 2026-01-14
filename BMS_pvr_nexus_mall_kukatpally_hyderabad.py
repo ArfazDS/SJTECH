@@ -6,6 +6,9 @@ import re
 import os
 import json
 import random
+import asyncio
+from PIL import Image
+import asyncio
 
 # ================= CONFIG =================
 with open("config.json", "r") as f:
@@ -53,6 +56,37 @@ def parse_time(t):
         return None
     return datetime.strptime(match.group(), "%I:%M %p").time()
 
+def is_recliner_available(r, g, b):
+    # (Same logic as before)
+    bright_enough = g > 130
+    not_yellow_or_white = g > (r + 40)
+    not_blue = g > (b + 30)
+    return bright_enough and not_yellow_or_white and not_blue
+
+def find_recliner_seats(screenshot_bytes, max_seats):
+    # (Same logic as before)
+    image = Image.open(io.BytesIO(screenshot_bytes))
+    pixels = image.load()
+    width, height = image.size
+    found_seats = []
+    scan_height_limit = int(height * 0.25)
+    step = 10
+    
+    print(f"Scanning top {scan_height_limit}px...")
+    for y in range(20, scan_height_limit, step):
+        if len(found_seats) >= max_seats: break
+        for x in range(20, width - 20, step):
+            if len(found_seats) >= max_seats: break
+            r, g, b = pixels[x, y][:3]
+            if is_recliner_available(r, g, b):
+                too_close = False
+                for fx, fy in found_seats:
+                    if math.hypot(x - fx, y - fy) < 40:
+                        too_close = True; break
+                if not too_close:
+                    found_seats.append((x + 10, y + 10))
+    return found_seats, width, height
+
 def run():
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
@@ -61,7 +95,7 @@ def run():
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
                 "AppleWebKit/537.36 (KHTML, like Gecko) "
                 "Chrome/120.0.0.0 Safari/537.36"
-            )
+            ), viewport={"width": 1280, "height": 800}
         )
         page = context.new_page()
         print("[*] Navigating...")
@@ -137,6 +171,71 @@ def run():
                         if SEAT_TYPE.upper() in seat_text:
                             if "SOLD OUT" not in seat_text:
                                 seat_available = True
+                                await page.get_by_role("slider").fill("1")
+                                await page.get_by_label("Select Seats").click()
+                                await page.wait_for_timeout(5000)
+                        
+                                # --- CANVAS LOGIC ---
+                                canvas_selector = ".konvajs-content canvas"
+                                print("Waiting for seat map canvas...")
+                        
+                                try:
+                                    await page.wait_for_selector(canvas_selector, state="visible", timeout=20000)
+                                    await page.evaluate("window.scrollTo(0, 0)")
+                                    await asyncio.sleep(3) 
+                                except:
+                                    print("Canvas not found or blocked.")
+                                    await browser.close()
+                                    return
+                        
+                                canvas_el = page.locator(canvas_selector).first
+                                canvas_box = await canvas_el.bounding_box()
+                        
+                                if not canvas_box:
+                                    print("Canvas box missing.")
+                                    await browser.close()
+                                    return
+                        
+                                print("Taking canvas screenshot...")
+                                png_bytes = await canvas_el.screenshot()
+                        
+                                targets, img_w, img_h = find_recliner_seats(png_bytes, SEATS_TO_SELECT)
+                        
+                                if not targets:
+                                    print("No available Recliner seats found.")
+                                else:
+                                    print(f"Found {len(targets)} Recliner seats. Clicking...")
+                                    scale_x = canvas_box["width"] / img_w
+                                    scale_y = canvas_box["height"] / img_h
+                        
+                                    for i, (tx, ty) in enumerate(targets):
+                                        abs_x = canvas_box["x"] + (tx * scale_x)
+                                        abs_y = canvas_box["y"] + (ty * scale_y)
+                                        
+                                        # Add tiny random jitter to click to look human
+                                        jitter_x = random.randint(-2, 2)
+                                        jitter_y = random.randint(-2, 2)
+                        
+                                        print(f"Clicking Recliner {i+1}...")
+                                        await page.mouse.move(abs_x + jitter_x, abs_y + jitter_y, steps=5)
+                                        await page.mouse.click(abs_x + jitter_x, abs_y + jitter_y)
+                                        await asyncio.sleep(random.uniform(0.3, 0.7)) 
+                        
+                                    # --- PAY BUTTON ---
+                                    await asyncio.sleep(1)
+                                    
+                                    await page.get_by_label("Pay ₹").click()
+                                    print("Clicked Pay Button")
+                                    await page.get_by_text("Accept").click()
+                                    print("Clicked Accept Button")
+                                    
+                                    await page.get_by_text("Skip").click()
+                                    await page.wait_for_timeout(3000)
+                                    await page.get_by_placeholder("eg: abc@gmail.com").fill("khan@gmail.com")
+                                    await page.get_by_placeholder("eg: 91480XXXXX").click()
+                                    await page.get_by_placeholder("eg: 91480XXXXX").fill("9876543210")
+                                    await page.get_by_label("Submit").click()
+                                    await page.wait_for_timeout(5000)
                             break
 
                     # --- GO BACK ---
