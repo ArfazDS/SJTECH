@@ -4,17 +4,20 @@ import sys
 
 CONFIG_FILE = "config.json"
 
-def parse_message(text):
-    # Expected: /update YYYYMMDD Language Movie Name
+def parse_update_command(text):
     parts = text.split()
-    if parts[0] != "/update" or len(parts) < 4:
-        raise ValueError("Invalid command")
+
+    if parts[0] != "/update" or len(parts) < 6:
+        raise ValueError("Invalid command format")
 
     return {
         "TARGET_DATE_ID": parts[1],
         "LANGUAGE": parts[2],
-        "MOVIE_NAME": " ".join(parts[3:])
+        "Str_Time": parts[3],
+        "End_Time": parts[4],
+        "MOVIE_NAME": " ".join(parts[5:])
     }
+
 
 if __name__ == "__main__":
     telegram_message = os.getenv("TELEGRAM_MESSAGE")
