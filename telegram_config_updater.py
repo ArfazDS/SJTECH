@@ -109,8 +109,11 @@ if __name__ == "__main__":
             # --- NEW: Send Confirmation to Telegram ---
             formatted_json = json.dumps(config, indent=2)
             response_msg = (
-                f"✅ *Configuration Updated!*\n\n"
-                f"```json\n{formatted_json}\n```"
+                f"✅ *Movie Details Updated!*\n\n"
+                f"🎬 *Movie:* {config.get('MOVIE_NAME')}\n"
+                f"🗣 *Language:* {config.get('LANGUAGE')}\n"
+                f"📅 *Date:* {config.get('TARGET_DATE_ID')}\n"
+                f"⏰ *Time Slot:* {config.get('Str_Time')}:00 - {config.get('End_Time')}:00"
             )
             send_telegram_response(response_msg)
             # ------------------------------------------
