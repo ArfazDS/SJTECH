@@ -25,7 +25,7 @@ if __name__ == "__main__":
         print("No Telegram message found")
         sys.exit(0)
 
-    values = parse_message(telegram_message)
+    values = parse_update_command(telegram_message)
 
     with open(CONFIG_FILE, "r") as f:
         config = json.load(f)
