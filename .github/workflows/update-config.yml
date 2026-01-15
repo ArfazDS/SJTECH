@@ -1,11 +1,8 @@
 name: Update config.json from Telegram
 
 on:
-  workflow_dispatch:
-    inputs:
-      telegram_message:
-        description: "Telegram /update command"
-        required: true
+  schedule:
+    - cron: "*/1 * * * *"   # every 2 minutes
 
 jobs:
   update-config:
