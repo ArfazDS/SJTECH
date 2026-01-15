@@ -36,4 +36,4 @@ jobs:
           git config user.email "telegram@bot.com"
           git add config.json
           git diff --cached --quiet || git commit -m "Update config.json via Telegram"
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          git push https://x-access-token:${{ secrets.GIT_TOKEN_CUSTOM }}@github.com/${{ github.repository }}.git
