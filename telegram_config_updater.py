@@ -18,7 +18,6 @@ def parse_update_command(text):
         "MOVIE_NAME": " ".join(parts[5:])
     }
 
-
 if __name__ == "__main__":
     telegram_message = os.getenv("TELEGRAM_MESSAGE")
 
