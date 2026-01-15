@@ -1,33 +1,33 @@
-name: Update Config from Telegram
+name: Update config.json from Telegram
 
 on:
-  schedule:
-      - cron: "*/1 * * * *"   # every 2 minutes
   workflow_dispatch:
+    inputs:
+      telegram_message:
+        description: "Telegram /update command"
+        required: true
 
 jobs:
   update-config:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-        with:
-          persist-credentials: false
+      - uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Install dependencies
-        run: |
-          pip install requests
-
-      - name: Run updater
+      - name: Update config
         env:
-          GITHUB_TOKEN_CUSTOM: ${{ secrets.GIT_TOKEN_CUSTOM }}
-          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_MESSAGE: ${{ github.event.inputs.telegram_message }}
         run: |
-          python update_config.py
+          python telegram_config_updater.py
+
+      - name: Commit changes
+        run: |
+          git config user.name "telegram-bot"
+          git config user.email "telegram@bot.com"
+          git add config.json
+          git commit -m "Update config.json via Telegram"
+          git push
