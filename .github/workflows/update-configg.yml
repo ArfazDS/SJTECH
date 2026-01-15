@@ -1,4 +1,4 @@
-name: Update configg.json from Telegram
+name: Update config file
 
 on:
   schedule:
