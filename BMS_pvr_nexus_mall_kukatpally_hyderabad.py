@@ -94,6 +94,27 @@ def find_recliner_seats(screenshot_bytes, max_seats):
                     found_seats.append((x + 10, y + 10))
     return found_seats, width, height
 
+def send_telegram_photo(photo_bytes, caption=None):
+    if not TELEGRAM_TOKEN or not TELEGRAM_CHAT_ID:
+        print("[Telegram disabled] Photo not sent")
+        return
+
+    url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendPhoto"
+
+    files = {
+        "photo": ("seats.png", photo_bytes)
+    }
+
+    data = {
+        "chat_id": TELEGRAM_CHAT_ID
+    }
+
+    if caption:
+        data["caption"] = caption
+
+    r = requests.post(url, data=data, files=files, timeout=20)
+    print("Telegram photo response:", r.text)
+
 def run():
     with sync_playwright() as p:
         # browser = p.chromium.launch(headless=True)
