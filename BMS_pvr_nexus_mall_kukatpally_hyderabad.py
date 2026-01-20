@@ -179,7 +179,11 @@ def run():
                     if show.locator("div.sc-yr56qh-0.dSFYKI").count() > 0:
                         continue
 
-                    show_time_text = show.inner_text().strip()
+                    # show_time_text = show.inner_text().strip()
+                    try:
+                        show_time_text = show.inner_text(timeout=5000)
+                    except:
+                        continue
                     show_time = parse_time(show_time_text)
                     if not show_time:
                         continue
