@@ -25,26 +25,26 @@ jobs:
           pip install -r requirements.txt
           playwright install chromium
 
-      # - name: Run BMS_aparna_cinemas_nallagandla.py
-      #   continue-on-error: true
-      #   env:
-      #     TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-      #     TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-      #   run: python BMS_aparna_cinemas_nallagandla.py
+      - name: Run BMS_aparna_cinemas_nallagandla.py
+        continue-on-error: true
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python BMS_aparna_cinemas_nallagandla.py
 
-      # - name: Run BMS_amb_cinemas_gachibowli.py
-      #   continue-on-error: true
-      #   env:
-      #     TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-      #     TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-      #   run: python BMS_amb_cinemas_gachibowli.py
+      - name: Run BMS_amb_cinemas_gachibowli.py
+        continue-on-error: true
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python BMS_amb_cinemas_gachibowli.py
 
-      # - name: Run BMS_pvr_inorbit_cyberabad.py
-      #   continue-on-error: true
-      #   env:
-      #     TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-      #     TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-      #   run: python BMS_pvr_inorbit_cyberabad.py
+      - name: Run BMS_pvr_inorbit_cyberabad.py
+        continue-on-error: true
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python BMS_pvr_inorbit_cyberabad.py
 
       - name: Run BMS_pvr_nexus_mall_kukatpally_hyderabad.py
         continue-on-error: true
