@@ -3,7 +3,7 @@ name: Update config file
 on:
   workflow_dispatch:
   schedule:
-    - cron: "*/1 * * * *"  # Runs every minute
+    - cron: "*/3 * * * *"  # Runs every 3 minute
 
 # 1. FIX THE 403 ERROR
 permissions:
