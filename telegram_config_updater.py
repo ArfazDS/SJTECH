@@ -96,7 +96,9 @@ if __name__ == "__main__":
         # (We check specific fields to avoid unnecessary writes/notifications)
         if (config.get("MOVIE_NAME") != values["MOVIE_NAME"] or 
             config.get("LANGUAGE") != values["LANGUAGE"] or
-            config.get("TARGET_DATE_ID") != values["TARGET_DATE_ID"]):
+            config.get("TARGET_DATE_ID") != values["TARGET_DATE_ID"] or
+            config.get("Str_Time") != values["Str_Time"] or
+            config.get("End_Time") != values["End_Time"]):
             
             config.update(values)
             
