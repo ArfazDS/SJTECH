@@ -1,325 +1,408 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Menu, X, ChevronRight, Zap, Target, BarChart3, 
-  ShieldCheck, Cpu, Database, Users, Building, 
-  Award, ArrowRight, Globe, CheckCircle2
-} from 'lucide-react';
-
-export default function App() {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  // Handle scroll for sticky navbar glass effect
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // SEO Schema Markup (Injects rich data for Google AI & Search)
-  const schemaData = {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "SJTech Solutions - EIIIS & EIIP",
-    "applicationCategory": "BusinessApplication",
-    "operatingSystem": "Cloud, Mobile",
-    "description": "Proprietary AI & ML SaaS products for enterprise loss reduction, vigilance checking, and revenue enhancement for Electricity Distribution Utilities (DISCOMs).",
-    "provider": {
-      "@type": "Organization",
-      "name": "SJTECH SOLUTIONS PVT. LTD.",
-      "url": "https://sjtechsolution.com",
-      "logo": "https://sjtechsolution.com/assets/images/logo01.png",
-      "address": [
-        {
-          "@type": "PostalAddress",
-          "streetAddress": "158, Zone-I, M. P. Nagar",
-          "addressLocality": "Bhopal",
-          "addressRegion": "Madhya Pradesh",
-          "postalCode": "462011",
-          "addressCountry": "IN"
-        },
-        {
-          "@type": "PostalAddress",
-          "streetAddress": "5900 Balcones Drive STE 100",
-          "addressLocality": "Austin",
-          "addressRegion": "TX",
-          "postalCode": "78731",
-          "addressCountry": "US"
-        }
-      ]
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SJTech Solutions - Enterprise Loss Reduction</title>
+    
+    <!-- SEO JSON-LD Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "SJTech Solutions - EIIIS & EIIP",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Cloud, Mobile",
+      "description": "Proprietary AI & ML SaaS products for enterprise loss reduction, vigilance checking, and revenue enhancement for Electricity Distribution Utilities (DISCOMs).",
+      "provider": {
+        "@type": "Organization",
+        "name": "SJTECH SOLUTIONS PVT. LTD.",
+        "url": "https://sjtechsolution.com",
+        "logo": "https://sjtechsolution.com/assets/images/logo01.png",
+        "address": [
+          {
+            "@type": "PostalAddress",
+            "streetAddress": "158, Zone-I, M. P. Nagar",
+            "addressLocality": "Bhopal",
+            "addressRegion": "Madhya Pradesh",
+            "postalCode": "462011",
+            "addressCountry": "IN"
+          },
+          {
+            "@type": "PostalAddress",
+            "streetAddress": "5900 Balcones Drive STE 100",
+            "addressLocality": "Austin",
+            "addressRegion": "TX",
+            "postalCode": "78731",
+            "addressCountry": "US"
+          }
+        ]
+      }
     }
-  };
+    </script>
 
-  return (
-    <div className="min-h-screen bg-slate-950 text-slate-50 font-sans selection:bg-emerald-500/30">
-      {/* Inject SEO Schema */}
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }} />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
 
-      {/* Navigation */}
-      <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-slate-950/80 backdrop-blur-md border-b border-slate-800 py-3' : 'bg-transparent py-5'}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded bg-emerald-500 flex items-center justify-center">
-                <Zap className="text-slate-950 w-5 h-5 fill-current" />
-              </div>
-              <span className="font-bold text-xl tracking-tight text-white">SJTECH</span>
-            </div>
-            
-            <div className="hidden md:flex space-x-8">
-              {['Solutions', 'Technology', 'Executions', 'Company'].map((item) => (
-                <a key={item} href={`#${item.toLowerCase()}`} className="text-sm font-medium text-slate-300 hover:text-emerald-400 transition-colors">
-                  {item}
-                </a>
-              ))}
-            </div>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 
-            <div className="hidden md:flex">
-              <a href="#contact" className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-5 py-2.5 rounded-full text-sm font-semibold transition-all shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(16,185,129,0.5)]">
-                Request Demo
-              </a>
-            </div>
+    <!-- Custom inline CSS for minor specifics -->
+    <style>
+        body {
+            background-color: #020617; /* slate-950 */
+            color: #f8fafc; /* slate-50 */
+        }
+        ::selection {
+            background-color: rgba(16, 185, 129, 0.3); /* emerald-500/30 */
+        }
+    </style>
+</head>
+<body class="min-h-screen font-sans antialiased selection:bg-emerald-500/30">
 
-            <button className="md:hidden text-slate-300" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-              {mobileMenuOpen ? <X /> : <Menu />}
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03]"></div>
-        <div className="absolute top-0 right-0 -translate-y-12 translate-x-1/3 w-[800px] h-[800px] bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none"></div>
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 mb-8">
-            <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span className="text-xs font-medium text-slate-300">DIPP Certified Startup by Govt. of India</span>
-          </div>
-          
-          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 leading-tight">
-            Enterprise Loss Reduction. <br className="hidden md:block" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
-              Powered by AI.
-            </span>
-          </h1>
-          
-          <p className="mt-4 text-xl text-slate-400 max-w-3xl mx-auto mb-10 leading-relaxed">
-            Proprietary SaaS solutions for DISCOMs and modern enterprises. Accurately identify irregularities, recover arrears, and drastically reduce power losses with zero new hardware.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <button className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-8 py-4 rounded-full font-semibold text-lg transition-all flex items-center justify-center gap-2">
-              Explore EIIIS Platform <ArrowRight className="w-5 h-5" />
-            </button>
-            <button className="bg-slate-900 hover:bg-slate-800 border border-slate-800 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all">
-              View Case Studies
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* Social Proof / Awards Strip */}
-      <section className="border-y border-slate-800/50 bg-slate-900/50 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-center text-sm text-slate-500 font-medium mb-6 uppercase tracking-widest">Recognized & Trusted By</p>
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
-            <div className="flex items-center gap-2"><Globe className="w-6 h-6 text-emerald-500"/><span className="font-bold text-lg">Startup20 (G20)</span></div>
-            <div className="flex items-center gap-2"><Building className="w-6 h-6 text-emerald-500"/><span className="font-bold text-lg">Govt. of MP</span></div>
-            <div className="flex items-center gap-2"><Award className="w-6 h-6 text-emerald-500"/><span className="font-bold text-lg">NASSCOM T-AIM</span></div>
-            <div className="flex items-center gap-2"><Zap className="w-6 h-6 text-emerald-500"/><span className="font-bold text-lg">Powerthon-2022</span></div>
-          </div>
-        </div>
-      </section>
-
-      {/* The Solutions (Bento Grid) */}
-      <section id="solutions" className="py-24 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold mb-4">Our Core Solutions</h2>
-            <p className="text-slate-400 text-lg max-w-2xl">Bespoke SaaS platforms engineered from the ground up to solve the energy sector's most complex challenges.</p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* EIIIS Card */}
-            <div className="group bg-slate-900 border border-slate-800 rounded-3xl p-8 md:p-12 hover:border-emerald-500/30 transition-all duration-300 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl group-hover:bg-emerald-500/10 transition-colors"></div>
-              <div className="w-14 h-14 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex items-center justify-center mb-8">
-                <Target className="w-7 h-7 text-emerald-400" />
-              </div>
-              <h3 className="text-3xl font-bold mb-4">EIIIS Platform</h3>
-              <p className="text-slate-400 leading-relaxed mb-8">
-                An AI/ML-based proprietary SaaS solution designed to reduce losses, increase revenue, and accelerate arrear recovery for Energy Distribution Utilities. It enables highly accurate identification, inspection, and follow-up of grid irregularities.
-              </p>
-              <ul className="space-y-3 mb-8">
-                {['Accurate vigilance checking', 'Digital Twin technology integration', 'Big Data loss prediction'].map((feature, i) => (
-                  <li key={i} className="flex items-center gap-3 text-sm text-slate-300">
-                    <CheckCircle2 className="w-5 h-5 text-emerald-500" /> {feature}
-                  </li>
-                ))}
-              </ul>
-              <a href="#contact" className="inline-flex items-center gap-2 text-emerald-400 font-medium hover:text-emerald-300 transition-colors">
-                Learn more about EIIIS <ChevronRight className="w-4 h-4" />
-              </a>
-            </div>
-
-            {/* EIIP Card */}
-            <div className="group bg-slate-900 border border-slate-800 rounded-3xl p-8 md:p-12 hover:border-cyan-500/30 transition-all duration-300 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl group-hover:bg-cyan-500/10 transition-colors"></div>
-              <div className="w-14 h-14 bg-cyan-500/10 border border-cyan-500/20 rounded-2xl flex items-center justify-center mb-8">
-                <BarChart3 className="w-7 h-7 text-cyan-400" />
-              </div>
-              <h3 className="text-3xl font-bold mb-4">EIIP Solution</h3>
-              <p className="text-slate-400 leading-relaxed mb-8">
-                A cutting-edge SaaS technology tailored for modern organizations to enhance operational efficiency and reduce electric charges and utility bills considerably through automated, AI-driven insights.
-              </p>
-              <ul className="space-y-3 mb-8">
-                {['Automated efficiency insights', 'Real-time billing reduction', 'Customized for large corporations'].map((feature, i) => (
-                  <li key={i} className="flex items-center gap-3 text-sm text-slate-300">
-                    <CheckCircle2 className="w-5 h-5 text-cyan-500" /> {feature}
-                  </li>
-                ))}
-              </ul>
-              <a href="#contact" className="inline-flex items-center gap-2 text-cyan-400 font-medium hover:text-cyan-300 transition-colors">
-                Learn more about EIIP <ChevronRight className="w-4 h-4" />
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Technology / Underlying Magic */}
-      <section id="technology" className="py-24 bg-slate-900 relative border-y border-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <h2 className="text-3xl md:text-5xl font-bold mb-6">The Underlying Magic</h2>
-              <p className="text-slate-400 text-lg mb-8 leading-relaxed">
-                We don't just provide software; we provide seamless integration. Our architecture is designed to overlay on your existing infrastructure, requiring zero new hardware investments.
-              </p>
-              <div className="space-y-6">
-                {[
-                  { icon: Cpu, title: 'Hardware Agnostic', desc: 'Compatible with all meter types: traditional, digital, AMR, and smart-meters. No new hardware required.' },
-                  { icon: Database, title: 'Massive Scale', desc: 'Capable of executing billions of data processing operations securely in the cloud.' },
-                  { icon: ShieldCheck, title: 'End-to-End Customization', desc: 'Standardized yet highly customizable to fit the specific operational procedures of any DISCOM.' }
-                ].map((item, i) => (
-                  <div key={i} className="flex gap-4">
-                    <div className="flex-shrink-0 mt-1">
-                      <div className="w-10 h-10 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center">
-                        <item.icon className="w-5 h-5 text-emerald-400" />
-                      </div>
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-transparent py-5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded bg-emerald-500 flex items-center justify-center">
+                        <i data-lucide="zap" class="text-slate-950 w-5 h-5 fill-current"></i>
                     </div>
-                    <div>
-                      <h4 className="text-lg font-bold text-white mb-1">{item.title}</h4>
-                      <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="relative">
-               {/* Abstract Tech Illustration placeholder */}
-               <div className="aspect-square rounded-full bg-gradient-to-tr from-slate-800 to-slate-900 border border-slate-700 p-8 relative flex items-center justify-center overflow-hidden shadow-2xl">
-                  <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20"></div>
-                  <div className="w-full h-full border border-dashed border-slate-600 rounded-full animate-[spin_60s_linear_infinite] absolute"></div>
-                  <div className="w-3/4 h-3/4 border border-emerald-500/30 rounded-full animate-[spin_40s_linear_infinite_reverse] absolute"></div>
-                  <div className="w-1/2 h-1/2 bg-slate-950 rounded-full z-10 flex items-center justify-center shadow-[0_0_50px_rgba(16,185,129,0.2)]">
-                    <Zap className="w-16 h-16 text-emerald-500" />
-                  </div>
-               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Case Studies */}
-      <section id="executions" className="py-24 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold mb-4">Proven at Enterprise Scale</h2>
-            <p className="text-slate-400 text-lg max-w-2xl mx-auto">Successfully deployed across massive governmental and utility infrastructures.</p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              { 
-                tag: 'Utility', 
-                title: 'MPMKVVCL DISCOM', 
-                location: 'Govt. of Madhya Pradesh',
-                desc: 'Successfully executed EIIIS vigilance checking project for 2+ years, leveraging AI and Digital Twin tech for massive loss reduction.'
-              },
-              { 
-                tag: 'Logistics ERP', 
-                title: 'Election Monitoring', 
-                location: 'Sehore Collectorate',
-                desc: 'Deployed a bespoke ERP to track 1205 booths, EVMs, and officials during the Vidhan Sabha election.'
-              },
-              { 
-                tag: 'Govt ERP', 
-                title: 'FDA Inspection System', 
-                location: 'Govt. of Madhya Pradesh',
-                desc: 'System used for 18+ months conducting 1300+ inspections at food sales points via bespoke mobile app.'
-              }
-            ].map((study, i) => (
-              <div key={i} className="bg-slate-900 border border-slate-800 rounded-2xl p-8 hover:-translate-y-2 transition-transform duration-300 cursor-pointer group">
-                <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-4 block">{study.tag}</span>
-                <h4 className="text-xl font-bold text-white mb-1 group-hover:text-emerald-300 transition-colors">{study.title}</h4>
-                <p className="text-sm text-slate-500 mb-4">{study.location}</p>
-                <p className="text-slate-400 text-sm leading-relaxed">{study.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-slate-950 border-t border-slate-800 pt-20 pb-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-12 mb-16">
-            <div className="col-span-2">
-              <div className="flex items-center gap-2 mb-6">
-                <div className="w-6 h-6 rounded bg-emerald-500 flex items-center justify-center">
-                  <Zap className="text-slate-950 w-3 h-3 fill-current" />
+                    <span class="font-bold text-xl tracking-tight text-white">SJTECH</span>
                 </div>
-                <span className="font-bold text-lg tracking-tight text-white">SJTECH</span>
-              </div>
-              <p className="text-slate-400 text-sm max-w-sm mb-6 leading-relaxed">
-                From Vision to Innovation. Proprietary Artificial Intelligence and Machine Learning solutions for enterprise loss reduction and revenue enhancement.
-              </p>
-              <div className="flex space-x-4">
-                {/* Social Links placeholders */}
-                <div className="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center hover:bg-emerald-500 hover:text-slate-950 transition-colors cursor-pointer text-slate-400"><span className="font-bold">in</span></div>
-                <div className="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center hover:bg-emerald-500 hover:text-slate-950 transition-colors cursor-pointer text-slate-400"><span className="font-bold">X</span></div>
-              </div>
+                
+                <div class="hidden md:flex space-x-8">
+                    <a href="#solutions" class="text-sm font-medium text-slate-300 hover:text-emerald-400 transition-colors">Solutions</a>
+                    <a href="#technology" class="text-sm font-medium text-slate-300 hover:text-emerald-400 transition-colors">Technology</a>
+                    <a href="#executions" class="text-sm font-medium text-slate-300 hover:text-emerald-400 transition-colors">Executions</a>
+                    <a href="#company" class="text-sm font-medium text-slate-300 hover:text-emerald-400 transition-colors">Company</a>
+                </div>
+
+                <div class="hidden md:flex">
+                    <a href="#contact" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-5 py-2.5 rounded-full text-sm font-semibold transition-all shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(16,185,129,0.5)]">
+                        Request Demo
+                    </a>
+                </div>
+
+                <button id="mobile-menu-btn" class="md:hidden text-slate-300">
+                    <i data-lucide="menu" id="menu-icon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu (Hidden by default) -->
+    <div id="mobile-menu" class="hidden fixed inset-0 z-40 bg-slate-950/95 backdrop-blur-lg pt-24 px-4">
+        <div class="flex flex-col space-y-6 text-center text-lg">
+            <a href="#solutions" class="mobile-link text-slate-300 hover:text-emerald-400 font-medium">Solutions</a>
+            <a href="#technology" class="mobile-link text-slate-300 hover:text-emerald-400 font-medium">Technology</a>
+            <a href="#executions" class="mobile-link text-slate-300 hover:text-emerald-400 font-medium">Executions</a>
+            <a href="#company" class="mobile-link text-slate-300 hover:text-emerald-400 font-medium">Company</a>
+            <a href="#contact" class="mobile-link mt-4 bg-emerald-500 text-slate-950 py-3 rounded-full font-bold">Request Demo</a>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03]"></div>
+        <div class="absolute top-0 right-0 -translate-y-12 translate-x-1/3 w-[800px] h-[800px] bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 mb-8">
+                <span class="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="text-xs font-medium text-slate-300">DIPP Certified Startup by Govt. of India</span>
             </div>
             
-            <div>
-              <h4 className="text-white font-bold mb-6">India HQ</h4>
-              <p className="text-slate-400 text-sm mb-2">158, Zone-I, M. P. Nagar</p>
-              <p className="text-slate-400 text-sm mb-4">Bhopal, Madhya Pradesh 462011</p>
-              <p className="text-emerald-400 text-sm font-medium">+91 99772 75335</p>
+            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 leading-tight">
+                Enterprise Loss Reduction. <br class="hidden md:block" />
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
+                    Powered by AI.
+                </span>
+            </h1>
+            
+            <p class="mt-4 text-xl text-slate-400 max-w-3xl mx-auto mb-10 leading-relaxed">
+                Proprietary SaaS solutions for DISCOMs and modern enterprises. Accurately identify irregularities, recover arrears, and drastically reduce power losses with zero new hardware.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <button class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-8 py-4 rounded-full font-semibold text-lg transition-all flex items-center justify-center gap-2">
+                    Explore EIIIS Platform <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                </button>
+                <button class="bg-slate-900 hover:bg-slate-800 border border-slate-800 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all">
+                    View Case Studies
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof / Awards Strip -->
+    <section class="border-y border-slate-800/50 bg-slate-900/50 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p class="text-center text-sm text-slate-500 font-medium mb-6 uppercase tracking-widest">Recognized & Trusted By</p>
+            <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
+                <div class="flex items-center gap-2"><i data-lucide="globe" class="w-6 h-6 text-emerald-500"></i><span class="font-bold text-lg">Startup20 (G20)</span></div>
+                <div class="flex items-center gap-2"><i data-lucide="building" class="w-6 h-6 text-emerald-500"></i><span class="font-bold text-lg">Govt. of MP</span></div>
+                <div class="flex items-center gap-2"><i data-lucide="award" class="w-6 h-6 text-emerald-500"></i><span class="font-bold text-lg">NASSCOM T-AIM</span></div>
+                <div class="flex items-center gap-2"><i data-lucide="zap" class="w-6 h-6 text-emerald-500"></i><span class="font-bold text-lg">Powerthon-2022</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Solutions (Bento Grid) -->
+    <section id="solutions" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-16">
+                <h2 class="text-3xl md:text-5xl font-bold mb-4">Our Core Solutions</h2>
+                <p class="text-slate-400 text-lg max-w-2xl">Bespoke SaaS platforms engineered from the ground up to solve the energy sector's most complex challenges.</p>
             </div>
 
-            <div>
-              <h4 className="text-white font-bold mb-6">US Office</h4>
-              <p className="text-slate-400 text-sm mb-2">5900 Balcones Drive STE 100</p>
-              <p className="text-slate-400 text-sm mb-4">Austin, TX 78731</p>
-              <p className="text-emerald-400 text-sm font-medium">info@sjtechsolution.com</p>
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- EIIIS Card -->
+                <div class="group bg-slate-900 border border-slate-800 rounded-3xl p-8 md:p-12 hover:border-emerald-500/30 transition-all duration-300 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl group-hover:bg-emerald-500/10 transition-colors"></div>
+                    <div class="w-14 h-14 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex items-center justify-center mb-8">
+                        <i data-lucide="target" class="w-7 h-7 text-emerald-400"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold mb-4">EIIIS Platform</h3>
+                    <p class="text-slate-400 leading-relaxed mb-8">
+                        An AI/ML-based proprietary SaaS solution designed to reduce losses, increase revenue, and accelerate arrear recovery for Energy Distribution Utilities. It enables highly accurate identification, inspection, and follow-up of grid irregularities.
+                    </p>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center gap-3 text-sm text-slate-300"><i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-500"></i> Accurate vigilance checking</li>
+                        <li class="flex items-center gap-3 text-sm text-slate-300"><i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-500"></i> Digital Twin technology integration</li>
+                        <li class="flex items-center gap-3 text-sm text-slate-300"><i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-500"></i> Big Data loss prediction</li>
+                    </ul>
+                    <a href="#contact" class="inline-flex items-center gap-2 text-emerald-400 font-medium hover:text-emerald-300 transition-colors">
+                        Learn more about EIIIS <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+
+                <!-- EIIP Card -->
+                <div class="group bg-slate-900 border border-slate-800 rounded-3xl p-8 md:p-12 hover:border-cyan-500/30 transition-all duration-300 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl group-hover:bg-cyan-500/10 transition-colors"></div>
+                    <div class="w-14 h-14 bg-cyan-500/10 border border-cyan-500/20 rounded-2xl flex items-center justify-center mb-8">
+                        <i data-lucide="bar-chart-3" class="w-7 h-7 text-cyan-400"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold mb-4">EIIP Solution</h3>
+                    <p class="text-slate-400 leading-relaxed mb-8">
+                        A cutting-edge SaaS technology tailored for modern organizations to enhance operational efficiency and reduce electric charges and utility bills considerably through automated, AI-driven insights.
+                    </p>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center gap-3 text-sm text-slate-300"><i data-lucide="check-circle-2" class="w-5 h-5 text-cyan-500"></i> Automated efficiency insights</li>
+                        <li class="flex items-center gap-3 text-sm text-slate-300"><i data-lucide="check-circle-2" class="w-5 h-5 text-cyan-500"></i> Real-time billing reduction</li>
+                        <li class="flex items-center gap-3 text-sm text-slate-300"><i data-lucide="check-circle-2" class="w-5 h-5 text-cyan-500"></i> Customized for large corporations</li>
+                    </ul>
+                    <a href="#contact" class="inline-flex items-center gap-2 text-cyan-400 font-medium hover:text-cyan-300 transition-colors">
+                        Learn more about EIIP <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
             </div>
-          </div>
-          
-          <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-slate-500 text-sm">© {new Date().getFullYear()} SJTech Solutions Pvt. Ltd. All rights reserved.</p>
-            <div className="flex space-x-6 text-sm text-slate-500">
-              <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-            </div>
-          </div>
         </div>
-      </footer>
-    </div>
-  );
-}
+    </section>
+
+    <!-- Technology / Underlying Magic -->
+    <section id="technology" class="py-24 bg-slate-900 relative border-y border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <h2 class="text-3xl md:text-5xl font-bold mb-6">The Underlying Magic</h2>
+                    <p class="text-slate-400 text-lg mb-8 leading-relaxed">
+                        We don't just provide software; we provide seamless integration. Our architecture is designed to overlay on your existing infrastructure, requiring zero new hardware investments.
+                    </p>
+                    <div class="space-y-6">
+                        
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 mt-1">
+                                <div class="w-10 h-10 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center">
+                                    <i data-lucide="cpu" class="w-5 h-5 text-emerald-400"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-bold text-white mb-1">Hardware Agnostic</h4>
+                                <p class="text-slate-400 text-sm leading-relaxed">Compatible with all meter types: traditional, digital, AMR, and smart-meters. No new hardware required.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 mt-1">
+                                <div class="w-10 h-10 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center">
+                                    <i data-lucide="database" class="w-5 h-5 text-emerald-400"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-bold text-white mb-1">Massive Scale</h4>
+                                <p class="text-slate-400 text-sm leading-relaxed">Capable of executing billions of data processing operations securely in the cloud.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 mt-1">
+                                <div class="w-10 h-10 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center">
+                                    <i data-lucide="shield-check" class="w-5 h-5 text-emerald-400"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-bold text-white mb-1">End-to-End Customization</h4>
+                                <p class="text-slate-400 text-sm leading-relaxed">Standardized yet highly customizable to fit the specific operational procedures of any DISCOM.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="relative">
+                    <!-- Abstract Tech Illustration placeholder -->
+                    <div class="aspect-square rounded-full bg-gradient-to-tr from-slate-800 to-slate-900 border border-slate-700 p-8 relative flex items-center justify-center overflow-hidden shadow-2xl">
+                        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20"></div>
+                        <div class="w-full h-full border border-dashed border-slate-600 rounded-full animate-[spin_60s_linear_infinite] absolute"></div>
+                        <div class="w-3/4 h-3/4 border border-emerald-500/30 rounded-full animate-[spin_40s_linear_infinite_reverse] absolute"></div>
+                        <div class="w-1/2 h-1/2 bg-slate-950 rounded-full z-10 flex items-center justify-center shadow-[0_0_50px_rgba(16,185,129,0.2)]">
+                            <i data-lucide="zap" class="w-16 h-16 text-emerald-500"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Case Studies -->
+    <section id="executions" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-bold mb-4">Proven at Enterprise Scale</h2>
+                <p class="text-slate-400 text-lg max-w-2xl mx-auto">Successfully deployed across massive governmental and utility infrastructures.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-8 hover:-translate-y-2 transition-transform duration-300 cursor-pointer group">
+                    <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-4 block">Utility</span>
+                    <h4 class="text-xl font-bold text-white mb-1 group-hover:text-emerald-300 transition-colors">MPMKVVCL DISCOM</h4>
+                    <p class="text-sm text-slate-500 mb-4">Govt. of Madhya Pradesh</p>
+                    <p class="text-slate-400 text-sm leading-relaxed">Successfully executed EIIIS vigilance checking project for 2+ years, leveraging AI and Digital Twin tech for massive loss reduction.</p>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-8 hover:-translate-y-2 transition-transform duration-300 cursor-pointer group">
+                    <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-4 block">Logistics ERP</span>
+                    <h4 class="text-xl font-bold text-white mb-1 group-hover:text-emerald-300 transition-colors">Election Monitoring</h4>
+                    <p class="text-sm text-slate-500 mb-4">Sehore Collectorate</p>
+                    <p class="text-slate-400 text-sm leading-relaxed">Deployed a bespoke ERP to track 1205 booths, EVMs, and officials during the Vidhan Sabha election.</p>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-8 hover:-translate-y-2 transition-transform duration-300 cursor-pointer group">
+                    <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-4 block">Govt ERP</span>
+                    <h4 class="text-xl font-bold text-white mb-1 group-hover:text-emerald-300 transition-colors">FDA Inspection System</h4>
+                    <p class="text-sm text-slate-500 mb-4">Govt. of Madhya Pradesh</p>
+                    <p class="text-slate-400 text-sm leading-relaxed">System used for 18+ months conducting 1300+ inspections at food sales points via bespoke mobile app.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 border-t border-slate-800 pt-20 pb-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-12 mb-16">
+                <div class="col-span-2">
+                    <div class="flex items-center gap-2 mb-6">
+                        <div class="w-6 h-6 rounded bg-emerald-500 flex items-center justify-center">
+                            <i data-lucide="zap" class="text-slate-950 w-3 h-3 fill-current"></i>
+                        </div>
+                        <span class="font-bold text-lg tracking-tight text-white">SJTECH</span>
+                    </div>
+                    <p class="text-slate-400 text-sm max-w-sm mb-6 leading-relaxed">
+                        From Vision to Innovation. Proprietary Artificial Intelligence and Machine Learning solutions for enterprise loss reduction and revenue enhancement.
+                    </p>
+                    <div class="flex space-x-4">
+                        <div class="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center hover:bg-emerald-500 hover:text-slate-950 transition-colors cursor-pointer text-slate-400"><span class="font-bold">in</span></div>
+                        <div class="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center hover:bg-emerald-500 hover:text-slate-950 transition-colors cursor-pointer text-slate-400"><span class="font-bold">X</span></div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-white font-bold mb-6">India HQ</h4>
+                    <p class="text-slate-400 text-sm mb-2">158, Zone-I, M. P. Nagar</p>
+                    <p class="text-slate-400 text-sm mb-4">Bhopal, Madhya Pradesh 462011</p>
+                    <p class="text-emerald-400 text-sm font-medium">+91 99772 75335</p>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-6">US Office</h4>
+                    <p class="text-slate-400 text-sm mb-2">5900 Balcones Drive STE 100</p>
+                    <p class="text-slate-400 text-sm mb-4">Austin, TX 78731</p>
+                    <p class="text-emerald-400 text-sm font-medium">info@sjtechsolution.com</p>
+                </div>
+            </div>
+            
+            <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-slate-500 text-sm" id="copyright-year">© SJTech Solutions Pvt. Ltd. All rights reserved.</p>
+                <div class="flex space-x-6 text-sm text-slate-500">
+                    <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Core Javascript Logic -->
+    <script>
+        // 1. Initialize Lucide Icons
+        lucide.createIcons();
+
+        // 2. Set dynamic copyright year
+        document.getElementById('copyright-year').innerHTML = `© ${new Date().getFullYear()} SJTech Solutions Pvt. Ltd. All rights reserved.`;
+
+        // 3. Navbar scroll effect logic
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                navbar.classList.add('bg-slate-950/80', 'backdrop-blur-md', 'border-b', 'border-slate-800', 'py-3');
+                navbar.classList.remove('bg-transparent', 'py-5');
+            } else {
+                navbar.classList.add('bg-transparent', 'py-5');
+                navbar.classList.remove('bg-slate-950/80', 'backdrop-blur-md', 'border-b', 'border-slate-800', 'py-3');
+            }
+        });
+
+        // 4. Mobile Menu toggle logic
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+        let isMenuOpen = false;
+
+        function toggleMenu() {
+            isMenuOpen = !isMenuOpen;
+            if (isMenuOpen) {
+                mobileMenu.classList.remove('hidden');
+                menuIcon.setAttribute('data-lucide', 'x');
+                document.body.style.overflow = 'hidden'; // prevent scrolling
+            } else {
+                mobileMenu.classList.add('hidden');
+                menuIcon.setAttribute('data-lucide', 'menu');
+                document.body.style.overflow = '';
+            }
+            lucide.createIcons(); // re-render the icon
+        }
+
+        mobileBtn.addEventListener('click', toggleMenu);
+
+        // Close menu when a link is clicked
+        document.querySelectorAll('.mobile-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if(isMenuOpen) toggleMenu();
+            });
+        });
+    </script>
+</body>
+</html>
