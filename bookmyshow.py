@@ -2,7 +2,7 @@ import asyncio
 import os
 import smtplib
 from email.message import EmailMessage
-from patchright.async_api import async_playwright
+from playwright.async_api import async_playwright
 
 def send_email_alert(EMAIL_USER, EMAIL_PASS):
 
