@@ -58,7 +58,7 @@ async def main():
     EMAIL_USER="arfazkhank@gmail.com" # Sender
     EMAIL_PASS="xkuz iysd imzc mabk"  # Password generated in app password section in gmail
 
-    url = "https://in.bookmyshow.com/cinemas/hyderabad/pvr-nexus-mall-kukatpally-hyderabad/buytickets/PVFS/20250710"
+    url = "https://in.bookmyshow.com/cinemas/hyderabad/pvr-nexus-mall-kukatpally-hyderabad/buytickets/PVFS/20260630"
     await bookmyshow(url,EMAIL_USER, EMAIL_PASS)
 
 if __name__ == "__main__":
