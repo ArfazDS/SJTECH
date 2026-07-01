@@ -4,8 +4,8 @@ import sys
 import requests
 
 CONFIG_FILE = "config.json"
-TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
-TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
+TELEGRAM_TOKEN = "8334972447:AAGJL5LzRkh5p9mdYixN8lD9i71ooCqEv5w"
+TELEGRAM_CHAT_ID = "684803039"
 
 def get_latest_message():
     """Fetches the latest message from the Telegram Bot API."""
@@ -71,63 +71,55 @@ def parse_update_command(text):
         "MOVIE_NAME": " ".join(parts[5:]) 
     }
 
-if __name__ == "__main__":
-    print("Checking for Telegram messages...")
+
+print("Checking for Telegram messages...")
+
+telegram_message = get_latest_message()
+
+# if not telegram_message:
+#     print("No new /update commands found.")
+#     sys.exit(0)
+
+print(f"Processing command: {telegram_message}")
+
+values = parse_update_command(telegram_message)
+
+# Load existing config or create empty dict
+if os.path.exists(CONFIG_FILE):
+    with open(CONFIG_FILE, "r") as f:
+        config = json.load(f)
+else:
+    config = {}
+
+# Check if update is needed
+# (We check specific fields to avoid unnecessary writes/notifications)
+if (config.get("MOVIE_NAME") != values["MOVIE_NAME"] or 
+    config.get("LANGUAGE") != values["LANGUAGE"] or
+    config.get("TARGET_DATE_ID") != values["TARGET_DATE_ID"] or
+    config.get("Str_Time") != values["Str_Time"] or
+    config.get("End_Time") != values["End_Time"]):
     
-    telegram_message = get_latest_message()
+    config.update(values)
+    
+    # Write to file
+    with open(CONFIG_FILE, "w") as f:
+        json.dump(config, f, indent=2)
+    
+    print("config.json updated successfully")
 
-    if not telegram_message:
-        print("No new /update commands found.")
-        sys.exit(0)
+    # --- NEW: Send Confirmation to Telegram ---
+    formatted_json = json.dumps(config, indent=2)
+    response_msg = (
+        f"✅ *Movie Details Updated!*\n\n"
+        f"🎬 *Movie:* {config.get('MOVIE_NAME')}\n"
+        f"🗣 *Language:* {config.get('LANGUAGE')}\n"
+        f"📅 *Date:* {config.get('TARGET_DATE_ID')}\n"
+        f"⏰ *Time Slot:* {config.get('Str_Time')}:00 - {config.get('End_Time')}:00"
+    )
+    send_telegram_response(response_msg)
+    # ------------------------------------------
 
-    print(f"Processing command: {telegram_message}")
-
-    try:
-        values = parse_update_command(telegram_message)
-        
-        # Load existing config or create empty dict
-        if os.path.exists(CONFIG_FILE):
-            with open(CONFIG_FILE, "r") as f:
-                config = json.load(f)
-        else:
-            config = {}
-
-        # Check if update is needed
-        # (We check specific fields to avoid unnecessary writes/notifications)
-        if (config.get("MOVIE_NAME") != values["MOVIE_NAME"] or 
-            config.get("LANGUAGE") != values["LANGUAGE"] or
-            config.get("TARGET_DATE_ID") != values["TARGET_DATE_ID"] or
-            config.get("Str_Time") != values["Str_Time"] or
-            config.get("End_Time") != values["End_Time"]):
-            
-            config.update(values)
-            
-            # Write to file
-            with open(CONFIG_FILE, "w") as f:
-                json.dump(config, f, indent=2)
-            
-            print("config.json updated successfully")
-
-            # --- NEW: Send Confirmation to Telegram ---
-            formatted_json = json.dumps(config, indent=2)
-            response_msg = (
-                f"✅ *Movie Details Updated!*\n\n"
-                f"🎬 *Movie:* {config.get('MOVIE_NAME')}\n"
-                f"🗣 *Language:* {config.get('LANGUAGE')}\n"
-                f"📅 *Date:* {config.get('TARGET_DATE_ID')}\n"
-                f"⏰ *Time Slot:* {config.get('Str_Time')}:00 - {config.get('End_Time')}:00"
-            )
-            send_telegram_response(response_msg)
-            # ------------------------------------------
-
-        else:
-            print("Config is already up to date.")
-            # Optional: Uncomment below if you want a message even when no changes occur
-            # send_telegram_response("ℹ️ Config is already up to date.")
-
-    except Exception as e:
-        error_msg = f"❌ Error processing update: {str(e)}"
-        print(error_msg)
-        # Optional: Send error to Telegram so you know it failed
-        # send_telegram_response(error_msg)
-        sys.exit(1)
+else:
+    print("Config is already up to date.")
+        # Optional: Uncomment below if you want a message even when no changes occur
+    send_telegram_response("ℹ️ Config is already up to date.")
